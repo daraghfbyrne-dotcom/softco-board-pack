@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoftCo February 2026 Board Pack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#047FE5;--dark-blue:#060D2E;--orange:#F7931E;--light-blue:#E8F2FD;--grey:#F2F2F2;--border:#e5e7eb;--muted:#6b7280;--fg:#111827}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--fg);background:#fff;margin:0;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6{font-family:'Lora',serif}
+#password-gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--dark-blue),var(--blue))}
+#password-gate.hidden{display:none}
+.gate-box{background:#fff;border-radius:16px;padding:48px;text-align:center;max-width:400px;width:90%;box-shadow:0 25px 60px rgba(0,0,0,0.3)}
+.gate-box h2{font-size:1.5rem;margin-bottom:8px;color:var(--fg)}
+.gate-box p{color:var(--muted);font-size:14px;margin-bottom:20px}
+.gate-box input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:8px;font-size:16px;outline:none;font-family:'Plus Jakarta Sans',sans-serif}
+.gate-box input:focus{border-color:var(--blue)}
+.gate-box button{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px;font-family:'Plus Jakarta Sans',sans-serif}
+.gate-box button:hover{background:#0367c2}
+.gate-error{color:#ef4444;font-size:13px;margin-top:8px;min-height:20px}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:256px;background:var(--dark-blue);z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+.sidebar-logo{padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-nav{flex:1;padding:12px 0}
+.sidebar-nav a{display:flex;align-items:center;padding:10px 20px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.2s;border-left:3px solid transparent}
+.sidebar-nav a:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.sidebar-nav a.active{color:#fff;background:rgba(4,127,229,0.15);border-left-color:var(--blue)}
+.sidebar-footer{padding:20px;border-top:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.35);font-size:11px;line-height:1.6}
+.main{margin-left:256px;min-height:100vh}
+.page{display:none;animation:fadeIn 0.4s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.page-container{padding:40px 48px;max-width:1200px}
+.slide-header{font-size:2rem;font-weight:600;margin-bottom:24px;color:var(--fg)}
+.kpi-card{background:#fff;border:1px solid var(--border);border-radius:0.75rem;padding:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.stat-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:4px;font-family:'Plus Jakarta Sans',sans-serif}
+.stat-value{font-size:2rem;font-weight:700;color:var(--blue)}
+.section-label{font-size:0.7rem;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:12px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.bullet{display:flex;gap:12px;margin-bottom:12px}
+.bullet-dot{color:var(--blue);flex-shrink:0;font-size:18px;line-height:1.7}
+.bullet-text{color:rgba(17,24,39,0.8);line-height:1.7;font-size:14px}
+.bullet-text strong{color:var(--fg);font-weight:600}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--border)}
+.data-table td{padding:8px 0;border-bottom:1px solid var(--border)}
+.legend{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap;align-items:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.legend-swatch{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+.cover-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--dark-blue) 0%,var(--blue) 60%,var(--dark-blue) 100%);position:relative;overflow:hidden}
+.cover-page .bg-c{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.1}
+.cover-page .c1{top:80px;left:80px;width:384px;height:384px;background:var(--light-blue)}
+.cover-page .c2{bottom:80px;right:80px;width:320px;height:320px;background:var(--orange)}
+.cover-content{text-align:center;z-index:10;padding:32px;animation:fadeIn 0.8s ease}
+.cover-content h1{font-size:3.5rem;font-weight:700;color:#fff;margin-bottom:24px;letter-spacing:-0.5px}
+.cover-content .sub{font-size:1.75rem;color:var(--light-blue);font-weight:300}
+.cover-content .line{width:96px;height:4px;background:var(--orange);border-radius:4px;margin:48px auto 0}
+.cover-content .date{color:rgba(255,255,255,0.5);font-size:1.1rem;margin-top:32px}
+.cover-corner{position:absolute;bottom:32px;right:32px;text-align:right;color:rgba(255,255,255,0.35);font-size:13px;line-height:1.6}
+.cover-corner span{color:var(--orange)}
+.brand-section{padding:80px 64px;border-top:1px solid rgba(0,0,0,0.06)}
+.brand-section.alt{background:var(--grey)}
+.brand-num{color:var(--blue);font-weight:500;letter-spacing:0.15em;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif}
+.brand-section h2{font-size:2.5rem;font-weight:300;margin-top:8px;margin-bottom:48px}
+.brand-hero{font-size:2.5rem;font-weight:300;line-height:1.4;text-align:center;padding:48px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:48px}
+.brand-hero span{color:var(--orange);display:block}
+.swatch{text-align:center}
+.swatch-color{width:100%;aspect-ratio:1;border-radius:4px;margin-bottom:12px;border:1px solid rgba(0,0,0,0.06)}
+.phase-card{background:#fff;padding:24px;border-radius:4px;border:1px solid var(--border)}
+.phase-card.st-complete{border-color:#bbf7d0}
+.phase-card.st-in-progress{border-color:var(--blue)}
+.pbadge{display:inline-block;font-size:11px;padding:2px 10px;border-radius:99px}
+.pbadge.complete{background:#dcfce7;color:#15803d}
+.pbadge.in-progress{background:rgba(4,127,229,0.1);color:var(--blue)}
+.pbadge.upcoming{background:var(--grey);color:var(--muted)}
+.progress-track{height:8px;background:#fff;border-radius:99px;border:1px solid rgba(0,0,0,0.06);position:relative;margin-bottom:32px}
+.progress-fill{height:100%;background:var(--blue);border-radius:99px}
+.progress-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:var(--orange);border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.gantt-wrap{background:#fff;border:1px solid var(--border);border-radius:0.75rem;overflow:hidden}
+.gantt-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.gantt-row:last-child{border-bottom:none}
+.gantt-label{padding:10px 12px;display:flex;align-items:flex-start;gap:6px;font-size:11px;font-weight:600;border-right:1px solid var(--border);background:rgba(0,0,0,0.01)}
+.gantt-label small{display:block;font-weight:400;color:var(--muted);font-size:9px}
+.gantt-bars{position:relative;min-height:28px}
+.gantt-bar{position:absolute;height:22px;border-radius:4px;color:#fff;font-size:10px;font-weight:500;padding:0 6px;display:flex;align-items:center;overflow:hidden;white-space:nowrap}
+.mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}.mb-8{margin-bottom:32px}.mb-10{margin-bottom:40px}
+.mt-2{margin-top:8px}.mt-4{margin-top:16px}.mt-6{margin-top:24px}
+.text-center{text-align:center}.text-right{text-align:right}
+.font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}
+.text-sm{font-size:0.875rem}.text-xs{font-size:0.75rem}.text-lg{font-size:1.125rem}.text-xl{font-size:1.25rem}
+.text-blue{color:var(--blue)}.text-muted{color:var(--muted)}.text-orange{color:var(--orange)}
+.italic{font-style:italic}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}.gap-4{gap:16px}.gap-6{gap:24px}
+.inline-flex{display:inline-flex}
+.border-l-blue{border-left:4px solid var(--blue)}
+.chart-container{position:relative;width:100%;height:320px}
+.chart-container-sm{position:relative;width:100%;height:220px}
+canvas{display:block}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="password-gate">
+<div class="gate-box">
+<svg width="160" height="60" viewBox="0 0 984.785 372.646" style="margin-bottom:24px"><path fill="#047fe5" d="M216.456,176.171l-45.873-8.523c-7.855-1.394-19.921-3.77-19.921-14.887,0-12.894,17.83-17.064,32.769-17.064,34.334,0,37.487,15.081,38.532,21.434h37.739c-.257-17.458-15.728-46.028-73.386-46.028-61.075,0-72.347,27.97-72.347,43.834,0,31.357,29.364,36.516,59.762,41.869l20.183,3.576c19.92,3.571,34.076,6.541,34.076,17.658,0,15.071-20.708,18.453-39.315,18.453-34.334,0-39.578-15.088-39.846-23.023h-37.733c0,17.67,11.779,47.622,80.464,47.622,16.515,0,74.174-3.776,74.174-46.616,0-25.611-23.599-33.546-49.278-38.305Z"/><path fill="#047fe5" d="M340.089,148.998c-37.487,0-71.301,17.458-71.301,55.551s33.814,55.545,71.301,55.545,71.295-17.458,71.295-55.545-33.814-55.551-71.295-55.551ZM340.089,236.683c-28.318,0-33.557-18.646-33.557-32.134s5.239-32.14,33.557-32.14,33.545,18.652,33.545,32.14-5.233,32.134-33.545,32.134Z"/><path fill="#047fe5" d="M534.374,123.197h-36.705v28.57h-18.863s-14.776,0-14.776,0v-4.17c0-8.724.269-11.7,12.848-11.7h10.225v-22.417c-3.153-.206-8.129-.394-18.88-.394-25.159,0-40.881,8.323-40.881,30.152v8.529h-20.183v19.846h20.183v85.703h36.688v-85.703h23.856s9.783,0,9.783,0v64.08c0,13.693,5.77,22.816,37.482,22.816h4.718c5.765,0,11.54-.2,17.293-.388v-21.034c-2.611.2-5.227.4-7.598.4-14.939,0-15.19-2.388-15.19-8.541v-57.333h22.788v-19.846h-22.788v-28.57Z"/><path fill="#047fe5" d="M646.11,136.895c32.494,0,38.538,16.064,41.675,24.599h39.315c-2.097-21.029-24.896-50.398-81.253-50.398-48.49,0-86.491,25.399-86.491,75.197,0,49.204,35.905,74.803,85.966,74.803,47.181,0,73.917-21.628,81.778-52.58h-39.315c-4.713,17.464-19.915,26.781-41.675,26.781-33.283,0-46.65-23.017-46.65-48.61,0-40.28,27.775-49.792,46.65-49.792Z"/><path fill="#047fe5" d="M801.387,148.998c-37.476,0-71.29,17.458-71.29,55.551s33.814,55.545,71.29,55.545,71.301-17.458,71.301-55.545-33.826-55.551-71.301-55.551ZM801.387,236.683c-28.307,0-33.551-18.646-33.551-32.134s5.244-32.14,33.551-32.14,33.556,18.652,33.556,32.14-5.244,32.134-33.556,32.134Z"/></svg>
+<h2 style="font-family:'Lora',serif">Board Pack Access</h2>
+<p>Enter the password to continue</p>
+<input type="password" id="gate-pwd" placeholder="Password" onkeydown="if(event.key==='Enter')checkPwd()">
+<button onclick="checkPwd()">Continue</button>
+<div class="gate-error" id="gate-error"></div>
+</div>
+</div>
+
+<!-- APP WRAPPER (hidden until auth) -->
+<div id="app-wrapper" style="display:none">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+<div class="sidebar-logo">
+<svg width="160" height="60" viewBox="0 0 984.785 372.646"><path fill="#ffffff" d="M216.456,176.171l-45.873-8.523c-7.855-1.394-19.921-3.77-19.921-14.887,0-12.894,17.83-17.064,32.769-17.064,34.334,0,37.487,15.081,38.532,21.434h37.739c-.257-17.458-15.728-46.028-73.386-46.028-61.075,0-72.347,27.97-72.347,43.834,0,31.357,29.364,36.516,59.762,41.869l20.183,3.576c19.92,3.571,34.076,6.541,34.076,17.658,0,15.071-20.708,18.453-39.315,18.453-34.334,0-39.578-15.088-39.846-23.023h-37.733c0,17.67,11.779,47.622,80.464,47.622,16.515,0,74.174-3.776,74.174-46.616,0-25.611-23.599-33.546-49.278-38.305Z"/><path fill="#ffffff" d="M340.089,148.998c-37.487,0-71.301,17.458-71.301,55.551s33.814,55.545,71.301,55.545,71.295-17.458,71.295-55.545-33.814-55.551-71.295-55.551ZM340.089,236.683c-28.318,0-33.557-18.646-33.557-32.134s5.239-32.14,33.557-32.14,33.545,18.652,33.545,32.14-5.233,32.134-33.545,32.134Z"/><path fill="#ffffff" d="M534.374,123.197h-36.705v28.57h-18.863s-14.776,0-14.776,0v-4.17c0-8.724.269-11.7,12.848-11.7h10.225v-22.417c-3.153-.206-8.129-.394-18.88-.394-25.159,0-40.881,8.323-40.881,30.152v8.529h-20.183v19.846h20.183v85.703h36.688v-85.703h23.856s9.783,0,9.783,0v64.08c0,13.693,5.77,22.816,37.482,22.816h4.718c5.765,0,11.54-.2,17.293-.388v-21.034c-2.611.2-5.227.4-7.598.4-14.939,0-15.19-2.388-15.19-8.541v-57.333h22.788v-19.846h-22.788v-28.57Z"/><path fill="#ffffff" d="M646.11,136.895c32.494,0,38.538,16.064,41.675,24.599h39.315c-2.097-21.029-24.896-50.398-81.253-50.398-48.49,0-86.491,25.399-86.491,75.197,0,49.204,35.905,74.803,85.966,74.803,47.181,0,73.917-21.628,81.778-52.58h-39.315c-4.713,17.464-19.915,26.781-41.675,26.781-33.283,0-46.65-23.017-46.65-48.61,0-40.28,27.775-49.792,46.65-49.792Z"/><path fill="#ffffff" d="M801.387,148.998c-37.476,0-71.29,17.458-71.29,55.551s33.814,55.545,71.29,55.545,71.301-17.458,71.301-55.545-33.826-55.551-71.301-55.551ZM801.387,236.683c-28.307,0-33.551-18.646-33.551-32.134s5.244-32.14,33.551-32.14,33.556,18.652,33.556,32.14-5.244,32.134-33.556,32.134Z"/></svg>
+</div>
+<div class="sidebar-nav" id="sidebar-nav">
+<a href="#cover" data-page="cover">Cover</a>
+<a href="#commentary" data-page="commentary">Commentary</a>
+<a href="#sales-forecast" data-page="sales-forecast">Q1 Sales Forecast</a>
+<a href="#pipeline" data-page="pipeline">Current Pipeline</a>
+<a href="#pipeline-generation" data-page="pipeline-generation">Pipeline Generation</a>
+<a href="#january-performance" data-page="january-performance">January Performance (final)</a>
+<a href="#february-performance" data-page="february-performance">February Performance</a>
+<a href="#campaigns" data-page="campaigns">Q1 Campaigns</a>
+<a href="#brand-refresh-2" data-page="brand-refresh-2">Brand Refresh</a>
+</div>
+<div class="sidebar-footer">
+February Board Pack<br>Sales &amp; Marketing
+</div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- PAGE 1: COVER -->
+<div class="page" id="page-cover">
+<div class="cover-page">
+<div class="bg-c c1"></div>
+<div class="bg-c c2"></div>
+<div class="cover-content">
+<svg width="200" height="76" viewBox="0 0 984.785 372.646" style="margin-bottom:32px"><path fill="#ffffff" d="M216.456,176.171l-45.873-8.523c-7.855-1.394-19.921-3.77-19.921-14.887,0-12.894,17.83-17.064,32.769-17.064,34.334,0,37.487,15.081,38.532,21.434h37.739c-.257-17.458-15.728-46.028-73.386-46.028-61.075,0-72.347,27.97-72.347,43.834,0,31.357,29.364,36.516,59.762,41.869l20.183,3.576c19.92,3.571,34.076,6.541,34.076,17.658,0,15.071-20.708,18.453-39.315,18.453-34.334,0-39.578-15.088-39.846-23.023h-37.733c0,17.67,11.779,47.622,80.464,47.622,16.515,0,74.174-3.776,74.174-46.616,0-25.611-23.599-33.546-49.278-38.305Z"/><path fill="#ffffff" d="M340.089,148.998c-37.487,0-71.301,17.458-71.301,55.551s33.814,55.545,71.301,55.545,71.295-17.458,71.295-55.545-33.814-55.551-71.295-55.551ZM340.089,236.683c-28.318,0-33.557-18.646-33.557-32.134s5.239-32.14,33.557-32.14,33.545,18.652,33.545,32.14-5.233,32.134-33.545,32.134Z"/><path fill="#ffffff" d="M534.374,123.197h-36.705v28.57h-18.863s-14.776,0-14.776,0v-4.17c0-8.724.269-11.7,12.848-11.7h10.225v-22.417c-3.153-.206-8.129-.394-18.88-.394-25.159,0-40.881,8.323-40.881,30.152v8.529h-20.183v19.846h20.183v85.703h36.688v-85.703h23.856s9.783,0,9.783,0v64.08c0,13.693,5.77,22.816,37.482,22.816h4.718c5.765,0,11.54-.2,17.293-.388v-21.034c-2.611.2-5.227.4-7.598.4-14.939,0-15.19-2.388-15.19-8.541v-57.333h22.788v-19.846h-22.788v-28.57Z"/><path fill="#ffffff" d="M646.11,136.895c32.494,0,38.538,16.064,41.675,24.599h39.315c-2.097-21.029-24.896-50.398-81.253-50.398-48.49,0-86.491,25.399-86.491,75.197,0,49.204,35.905,74.803,85.966,74.803,47.181,0,73.917-21.628,81.778-52.58h-39.315c-4.713,17.464-19.915,26.781-41.675,26.781-33.283,0-46.65-23.017-46.65-48.61,0-40.28,27.775-49.792,46.65-49.792Z"/><path fill="#ffffff" d="M801.387,148.998c-37.476,0-71.29,17.458-71.29,55.551s33.814,55.545,71.29,55.545,71.301-17.458,71.301-55.545-33.826-55.551-71.301-55.551ZM801.387,236.683c-28.307,0-33.551-18.646-33.551-32.134s5.244-32.14,33.551-32.14,33.556,18.652,33.556,32.14-5.244,32.134-33.556,32.134Z"/></svg>
+<h1>February Board Pack</h1>
+<p class="sub">Sales &amp; Marketing</p>
+<div class="line"></div>
+<p class="date">February 2026</p>
+</div>
+<div class="cover-corner">
+<p>AI-powered P2P &amp; AP automation,</p>
+<p><span>tailored to perfection</span></p>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: COMMENTARY -->
+<!-- COMMENTARY-START -->
+<div class="page" id="page-commentary">
+<div class="page-container">
+<h1 class="slide-header">Commentary</h1>
+<div class="bullet mb-4">
+<span class="bullet-dot">&bull;</span>
+<p class="bullet-text">As of today, we have closed <strong>&euro;231k</strong>, representing <strong>29%</strong> of Q1 target (&euro;808k).</p>
+</div>
+
+<div class="section-label">Current Forecast</div>
+<div class="grid-3 mb-6">
+<div class="kpi-card text-center">
+<p class="text-xs text-muted mb-2">Worst Case</p>
+<p style="font-size:1.4rem;font-weight:700;color:var(--fg)">&euro;531k</p>
+<p class="text-sm text-muted">66%</p>
+</div>
+<div class="kpi-card text-center">
+<p class="text-xs text-muted mb-2">Commit / Verbal</p>
+<p style="font-size:1.4rem;font-weight:700;color:var(--blue)">&euro;661k</p>
+<p class="text-sm text-muted">82%</p>
+</div>
+<div class="kpi-card text-center">
+<p class="text-xs text-muted mb-2">Best Case</p>
+<p style="font-size:1.4rem;font-weight:700;color:var(--fg)">&euro;921k</p>
+<p class="text-sm text-muted">114%</p>
+</div>
+</div>
+
+<div class="section-label">Strategic Initiatives</div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">To sustain early momentum, we have extended the pipeline creation <strong>SPIFF through the end of March</strong> across both Sales and SDR teams. Our priority remains accelerating pipeline generation while converting early-stage opportunities into closed revenue.</p></div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">All <strong>Route2Budgets</strong> have now been completed and presented by the Sales team. In parallel, <strong>8,304 named accounts</strong> have been aligned across Sales and SDR, uploaded into HubSpot, and activated through targeted campaigns.</p></div>
+<div class="bullet mb-6"><span class="bullet-dot">&bull;</span><p class="bullet-text">We have also launched an <strong>AI SDR Pilot</strong>, deploying two autonomous prospecting engines powered by Claude and integrated with HubSpot, Clay, and ZoomInfo. These will actively engage priority accounts across two core verticals by March.</p></div>
+
+<div class="section-label">Pipeline &amp; Activity Performance</div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">ARR pipeline generated (MTD, as at 19th Feb): <strong>&euro;785k</strong>, already 65% above last February's full-month total (&euro;476k).</p></div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">Qualified opportunities: <strong>7 MTD</strong> <span class="text-xs">(as at 19th Feb)</span>, matching last February's full-month performance.</p></div>
+<div class="bullet mb-6"><span class="bullet-dot">&bull;</span><p class="bullet-text">Sales leads: <strong>16 MTD</strong> <span class="text-xs">(as at 19th Feb)</span>, exceeding last year's full-month total (15).</p></div>
+
+<div class="section-label">Channel Contribution</div>
+<div class="grid-2 mb-6">
+<div class="kpi-card">
+<h4 style="font-size:14px;font-weight:600;color:var(--blue);margin-bottom:8px;font-family:'Plus Jakarta Sans',sans-serif">Marketing</h4>
+<ul style="list-style:none;padding:0"><li class="text-sm" style="color:rgba(17,24,39,0.8);margin-bottom:6px">63% of sales leads (10 of 16)</li><li class="text-sm" style="color:rgba(17,24,39,0.8)">53% of ARR pipeline (&euro;416k)</li></ul>
+</div>
+<div class="kpi-card">
+<h4 style="font-size:14px;font-weight:600;color:var(--fg);margin-bottom:8px;font-family:'Plus Jakarta Sans',sans-serif">Sales</h4>
+<ul style="list-style:none;padding:0"><li class="text-sm" style="color:rgba(17,24,39,0.8);margin-bottom:6px">47% of ARR pipeline (&euro;369k)</li><li class="text-sm" style="color:rgba(17,24,39,0.8)">5 sales leads</li></ul>
+</div>
+</div>
+
+<p class="italic" style="color:rgba(17,24,39,0.8);line-height:1.7;font-size:14px;border-left:3px solid var(--blue);padding-left:16px;margin-top:16px">Overall, we are entering Q1 with strong execution, accelerating pipeline creation, and building a solid foundation for sustained revenue performance.</p>
+</div>
+</div>
+
+<!-- COMMENTARY-END -->
+
+<!-- PAGE 3: Q1 SALES FORECAST -->
+<!-- SALES-FORECAST-START -->
+<div class="page" id="page-sales-forecast">
+<div class="page-container">
+<h1 class="slide-header">Q1 Sales Forecast</h1>
+<h2 style="font-size:1.25rem;font-weight:600;color:var(--blue);margin-bottom:16px">QTD</h2>
+<div class="grid-4 mb-10">
+<div class="kpi-card"><p class="stat-label">FY26 Q1 Linearity</p><p class="stat-value">17%</p></div>
+<div class="kpi-card"><p class="stat-label">Q1 Target</p><p class="stat-value">&euro;808k</p></div>
+<div class="kpi-card"><p class="stat-label">QTD <span style="font-size:10px;font-weight:400">(as at 19th Feb)</span></p><p class="stat-value">29%</p></div>
+<div class="kpi-card"><p class="stat-label">Budget Coverage</p><p class="stat-value">82%</p></div>
+</div>
+
+<h2 style="font-size:1.25rem;font-weight:600;color:var(--blue);margin-bottom:16px">Q1 Bridge</h2>
+<div class="grid-3 mb-10">
+<!-- Worst Case -->
+<div class="kpi-card" style="background:#fef2f2">
+<h3 style="font-size:1.1rem;font-weight:600;color:#dc2626;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">Worst Case</h3>
+<table class="data-table mb-4"><thead><tr><th>Deal</th><th class="text-right">EUR (k)</th></tr></thead><tbody>
+<tr><td style="color:rgba(17,24,39,0.8)">Won</td><td class="text-right font-medium">231</td></tr>
+<tr><td style="color:rgba(17,24,39,0.8)">Capital Power (NN)</td><td class="text-right font-medium">100</td></tr>
+<tr><td style="color:rgba(17,24,39,0.8)">Unifeeder (NN)</td><td class="text-right font-medium">130</td></tr>
+</tbody></table>
+<div style="padding-top:16px;border-top:1px solid var(--border)">
+<div class="flex justify-between mb-2"><span class="text-sm text-muted">Volume</span><span class="font-medium">70</span></div>
+<div class="flex justify-between mb-2"><span class="text-sm text-muted">Total</span><span style="font-weight:700;font-size:1.25rem;color:var(--blue)">&euro;531k</span></div>
+<div class="flex justify-between"><span class="text-sm text-muted">Mgt. Call vs. Budget</span><span class="text-muted">66%</span></div>
+</div>
+</div>
+<!-- Verbal Call -->
+<div class="kpi-card" style="background:#fefce8">
+<h3 style="font-size:1.1rem;font-weight:600;color:#a16207;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">Verbal Call</h3>
+<table class="data-table mb-4"><thead><tr><th>Deal</th><th class="text-right">EUR (k)</th></tr></thead><tbody>
+<tr><td style="color:rgba(17,24,39,0.8)">Wacoal (NN)</td><td class="text-right font-medium">65</td></tr>
+<tr><td style="color:rgba(17,24,39,0.8)">City Furniture (NN)</td><td class="text-right font-medium">65</td></tr>
+</tbody></table>
+<div style="padding-top:16px;border-top:1px solid var(--border)">
+<div class="flex justify-between mb-2"><span class="text-sm text-muted">Volume</span><span class="font-medium">-</span></div>
+<div class="flex justify-between mb-2"><span class="text-sm text-muted">Total</span><span style="font-weight:700;font-size:1.25rem;color:var(--blue)">&euro;661k</span></div>
+<div class="flex justify-between"><span class="text-sm text-muted">Mgt. Call vs. Budget</span><span style="font-weight:700;color:var(--orange)">82%</span></div>
+</div>
+</div>
+<!-- Best Case -->
+<div class="kpi-card" style="background:#f0fdf4">
+<h3 style="font-size:1.1rem;font-weight:600;color:#16a34a;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">Best Case</h3>
+<table class="data-table mb-4"><thead><tr><th>Deal</th><th class="text-right">EUR (k)</th></tr></thead><tbody>
+<tr><td style="color:rgba(17,24,39,0.8)">Flynn Construction (NN)</td><td class="text-right font-medium">130</td></tr>
+<tr><td style="color:rgba(17,24,39,0.8)">Allied Beverage (NN)</td><td class="text-right font-medium">70</td></tr>
+<tr><td style="color:rgba(17,24,39,0.8)">Upper Canada (NN)</td><td class="text-right font-medium">60</td></tr>
+</tbody></table>
+<div style="padding-top:16px;border-top:1px solid var(--border)">
+<div class="flex justify-between mb-2"><span class="text-sm text-muted">Volume</span><span class="font-medium">-</span></div>
+<div class="flex justify-between mb-2"><span class="text-sm text-muted">Total</span><span style="font-weight:700;font-size:1.25rem;color:var(--blue)">&euro;921k</span></div>
+<div class="flex justify-between"><span class="text-sm text-muted">Mgt. Call vs. Budget</span><span style="font-weight:700;color:#16a34a">114%</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SALES-FORECAST-END -->
+
+<!-- PAGE 4: CURRENT PIPELINE -->
+<div class="page" id="page-pipeline">
+<div class="page-container">
+<h1 class="slide-header">Current 2026 Pipeline By Qtr &amp; AE</h1>
+<!-- PIPELINE-HEADER-START -->
+<div class="inline-flex gap-6 mb-8" id="pipeline-header-badges">
+<!-- rendered by JS from PIPELINE_DATA -->
+</div>
+<!-- PIPELINE-HEADER-END -->
+
+<h2 style="font-size:1.25rem;font-weight:600;margin-bottom:16px">Pipeline by Quarter (Value + Stage Quality)</h2>
+<div class="kpi-card mb-8">
+<div class="chart-container"><canvas id="chartPipelineQtr"></canvas></div>
+<div class="legend"><div class="legend-item"><div class="legend-swatch" style="background:var(--blue)"></div>Pipeline ARR</div></div>
+</div>
+
+<div class="grid-4 mb-8" id="pipeline-quarter-cards">
+<!-- filled by JS -->
+</div>
+
+<h2 style="font-size:1.25rem;font-weight:600;margin-bottom:16px">Pipeline Ownership by AE (Value + Quarter Exposure)</h2>
+<div class="kpi-card mb-6">
+<div class="chart-container"><canvas id="chartAEPipeline"></canvas></div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px" id="ae-cards">
+<!-- filled by JS -->
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: PIPELINE GENERATION -->
+<div class="page" id="page-pipeline-generation">
+<div class="page-container">
+<h1 class="slide-header">Pipeline Generation</h1>
+<p class="text-sm text-muted" style="margin-top:-20px;margin-bottom:24px">(as presented in December Board)</p>
+
+<h2 style="font-size:1.25rem;font-weight:600;color:var(--blue);margin-bottom:16px">2026 Full Year Targets</h2>
+<div class="grid-3 mb-4">
+<div style="background:var(--blue);color:#fff;border-radius:12px;padding:24px;text-align:center"><p class="text-sm" style="opacity:0.8;margin-bottom:8px">ARR Target</p><p style="font-size:2.25rem;font-weight:700">&euro;3.8m</p></div>
+<div style="background:var(--orange);color:#fff;border-radius:12px;padding:24px;text-align:center"><p class="text-sm" style="opacity:0.8;margin-bottom:8px">Win Rate</p><p style="font-size:2.25rem;font-weight:700">18%</p></div>
+<div style="background:#1e3a5f;color:#fff;border-radius:12px;padding:24px;text-align:center"><p class="text-sm" style="opacity:0.8;margin-bottom:8px">Pipeline Required</p><p style="font-size:2.25rem;font-weight:700">&euro;21.1m</p></div>
+</div>
+<div class="kpi-card mb-10" style="border-left:4px solid var(--blue)">
+<div class="flex justify-between items-center">
+<div><p class="stat-label">Average Monthly Pipeline Required</p><p style="font-size:1.8rem;font-weight:700;color:var(--blue)">&euro;1.75m</p></div>
+<p class="text-sm text-muted text-right" style="max-width:280px">Based on &euro;21.1m total pipeline &divide; 12 months</p>
+</div>
+</div>
+
+<h2 style="font-size:1.25rem;font-weight:600;margin-bottom:16px">Monthly Pipeline Target Distribution Vs Actual</h2>
+<div class="kpi-card mb-10">
+<div class="chart-container"><canvas id="chartMonthlyPipeline"></canvas></div>
+<div class="legend">
+<div class="legend-item"><div class="legend-swatch" style="background:#e8f2fd"></div>Target</div>
+<div class="legend-item"><div class="legend-swatch" style="background:var(--blue)"></div>Actual</div>
+<div class="legend-item"><div class="legend-swatch" style="background:var(--orange)"></div>Actual (MTD, as at 19th Feb)</div>
+</div>
+</div>
+
+<h2 style="font-size:1.25rem;font-weight:600;margin-bottom:16px">Pipeline Contribution Target by Channel Vs Actual</h2>
+<div class="kpi-card mb-10">
+<div class="chart-container"><canvas id="chartChannelContrib"></canvas></div>
+<div class="legend">
+<div class="legend-item"><div class="legend-swatch" style="background:#c8d6e5"></div>Target (Full Year)</div>
+<div class="legend-item"><div class="legend-swatch" style="background:var(--blue)"></div>Actual YTD <span class="text-xs">(as at 19th Feb)</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: JANUARY PERFORMANCE -->
+<div class="page" id="page-january-performance">
+<div class="page-container">
+<h1 class="slide-header">Pipeline Generation &ndash; January Final</h1>
+<h2 style="font-size:1.25rem;font-weight:600;color:var(--blue);margin-bottom:16px">Performance Pipeline ARR Generated</h2>
+<div class="grid-2 mb-6">
+<div class="kpi-card"><p class="section-label">SALES LEADS</p><div class="chart-container-sm"><canvas id="chartJanLeads"></canvas></div>
+<div class="legend"><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 5"/></svg>2026 Target</div><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#f7931e" stroke-width="2" stroke-dasharray="5 5"/></svg>2025 Actual</div><div class="legend-item"><div style="width:24px;height:2px;background:var(--blue)"></div>2026 Actual</div></div>
+</div>
+<div class="kpi-card"><p class="section-label">SALES LEADS SPLIT</p><div class="chart-container-sm"><canvas id="chartJanLeadsPie"></canvas></div>
+<div class="legend" style="justify-content:center"><div class="legend-item"><div class="legend-swatch" style="background:#047fe5;border-radius:50%"></div>Marketing (15)</div><div class="legend-item"><div class="legend-swatch" style="background:#f7931e;border-radius:50%"></div>Sales (7)</div><div class="legend-item"><div class="legend-swatch" style="background:#22c55e;border-radius:50%"></div>Partnerships (1)</div><div class="legend-item">Total: <strong>23</strong></div></div>
+</div>
+</div>
+<div class="grid-2 mb-6">
+<div class="kpi-card"><p class="section-label">JANUARY 2026 INCREMENTAL PIPELINE PERFORMANCE</p><div class="chart-container-sm"><canvas id="chartJanPipeline"></canvas></div>
+<div class="legend"><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 5"/></svg>2026 Target</div><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#f7931e" stroke-width="2" stroke-dasharray="5 5"/></svg>2025 Actual</div><div class="legend-item"><div style="width:24px;height:2px;background:var(--blue)"></div>2026 Actual</div></div>
+</div>
+<div class="kpi-card"><p class="section-label">ARR PIPELINE GENERATED - SPLIT</p><div class="chart-container-sm"><canvas id="chartJanARRPie"></canvas></div>
+<div class="legend" style="justify-content:center"><div class="legend-item"><div class="legend-swatch" style="background:#047fe5;border-radius:50%"></div>Sales</div><div class="legend-item"><div class="legend-swatch" style="background:#f7931e;border-radius:50%"></div>Marketing</div><div class="legend-item">Total: <strong>&euro;1,171k</strong></div></div>
+</div>
+</div>
+
+<!-- JANUARY-COMMENTARY-START -->
+<div class="section-label">Commentary</div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">ARR pipeline generation (&euro;1.171m) 10% ahead of target (&euro;1.050m), reflecting a strong start to the year in pipeline creation.</p></div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">Sales leads (23) 1 below the full-month target of 24 leads, also materially strengthened YoY (+77% of 13). Strong in month conversion to qualified opps at 64%.</p></div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">Marketing contributing 65% of sales leads (15) driven by Organic Inbound (12) and 64% of total ARR pipeline (&euro;669k), while Sales-led channels (AE + SDR) contributed 30% of sales leads (7) and 36% of overall ARR pipeline (420k).</p></div>
+<!-- JANUARY-COMMENTARY-END -->
+</div>
+</div>
+
+<!-- PAGE 7: FEBRUARY PERFORMANCE -->
+<div class="page" id="page-february-performance">
+<div class="page-container">
+<h1 class="slide-header">Pipeline Generation &ndash; February</h1>
+<h2 style="font-size:1.25rem;font-weight:600;color:var(--blue);margin-bottom:16px">Performance Pipeline ARR Generated this month</h2>
+<div class="grid-2 mb-6">
+<div class="kpi-card"><p class="section-label">SALES LEADS MONTH TO DATE <span style="font-size:10px;font-weight:400">(as at 19th Feb)</span></p><div class="chart-container-sm"><canvas id="chartFebLeads"></canvas></div>
+<div class="legend"><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 5"/></svg>2026 Target</div><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#f7931e" stroke-width="2" stroke-dasharray="5 5"/></svg>2025 Actual</div><div class="legend-item"><div style="width:24px;height:2px;background:var(--blue)"></div>2026 MTD <span class="text-xs">(as at 19th Feb)</span></div></div>
+</div>
+<div class="kpi-card"><p class="section-label">SALES LEADS MTD - SPLIT <span style="font-size:10px;font-weight:400">(as at 19th Feb)</span></p><div class="chart-container-sm"><canvas id="chartFebLeadsPie"></canvas></div>
+<div class="legend" style="justify-content:center"><div class="legend-item"><div class="legend-swatch" style="background:#047fe5;border-radius:50%"></div>Marketing (10)</div><div class="legend-item"><div class="legend-swatch" style="background:#f7931e;border-radius:50%"></div>Sales (5)</div><div class="legend-item"><div class="legend-swatch" style="background:#22c55e;border-radius:50%"></div>Partnerships (1)</div><div class="legend-item">Total: <strong>16</strong></div></div>
+</div>
+</div>
+<div class="grid-2 mb-6">
+<div class="kpi-card"><p class="section-label">FEBRUARY 2026 INCREMENTAL PIPELINE PERFORMANCE</p><div class="chart-container-sm"><canvas id="chartFebPipeline"></canvas></div>
+<div class="legend"><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 5"/></svg>2026 Target</div><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#f7931e" stroke-width="2" stroke-dasharray="5 5"/></svg>2025 Actual</div><div class="legend-item"><div style="width:24px;height:2px;background:var(--blue)"></div>2026 MTD <span class="text-xs">(as at 19th Feb)</span></div></div>
+</div>
+<div class="kpi-card"><p class="section-label">ARR PIPELINE GENERATED MTD - SPLIT <span style="font-size:10px;font-weight:400">(as at 19th Feb)</span></p><div class="chart-container-sm"><canvas id="chartFebARRPie"></canvas></div>
+<div class="legend" style="justify-content:center"><div class="legend-item"><div class="legend-swatch" style="background:#047fe5;border-radius:50%"></div>Marketing</div><div class="legend-item"><div class="legend-swatch" style="background:#f7931e;border-radius:50%"></div>Sales</div><div class="legend-item">Total: <strong>&euro;785k</strong></div></div>
+</div>
+</div>
+
+<!-- FEBRUARY-COMMENTARY-START -->
+<div class="section-label">Commentary</div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">ARR pipeline generated (&euro;785k) MTD is already 65% above last Feb's full-month total (&euro;476k). Volume of opportunities is tracking well with 7 qualified opps MTD vs last Feb's full-month total, keeping February pacing strongly toward month-end expectations.</p></div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">Sales leads are at 16 MTD, already ahead of last year's full month actual (15), with momentum led by Organic Inbound (7), SDR (4), and AE-generated (2).</p></div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">Marketing is driving the majority of volume and value, contributing 63% of sales leads (10 of 16) and 53% of ARR pipeline (&euro;416k), with Sales delivering 47% of ARR pipeline (&euro;369k) and 5 sales leads.</p></div>
+<!-- FEBRUARY-COMMENTARY-END -->
+</div>
+</div>
+
+<!-- PAGE 8: Q1 CAMPAIGNS -->
+<div class="page" id="page-campaigns">
+<div class="page-container">
+<div class="flex justify-between items-center mb-6" style="flex-wrap:wrap;gap:16px">
+<h1 class="slide-header" style="margin-bottom:0">Q1 2026 Campaign Calendar</h1>
+<div class="flex gap-4">
+<div style="background:var(--orange);color:#fff;padding:8px 20px;border-radius:8px"><p style="font-size:11px;opacity:0.8">YTD Pipeline Generated <span style="font-size:9px">(as at 19th Feb)</span></p><p style="font-size:1.5rem;font-weight:700">&euro;1.9M</p></div>
+<div style="background:var(--blue);color:#fff;padding:8px 20px;border-radius:8px"><p style="font-size:11px;opacity:0.8">Pipeline Target</p><p style="font-size:1.5rem;font-weight:700">&euro;3.5M</p></div>
+</div>
+</div>
+
+<div class="gantt-wrap mb-6">
+<!-- Month header -->
+<div class="gantt-row" style="border-bottom:1px solid var(--border)">
+<div class="gantt-label" style="background:rgba(0,0,0,0.02)">&nbsp;</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr)">
+<div style="text-align:center;font-size:13px;font-weight:600;padding:12px 0">January</div>
+<div style="text-align:center;font-size:13px;font-weight:600;padding:12px 0;border-left:1px solid var(--border)">February</div>
+<div style="text-align:center;font-size:13px;font-weight:600;padding:12px 0;border-left:1px solid var(--border)">March</div>
+</div>
+</div>
+<!-- Week header -->
+<div class="gantt-row" style="background:var(--grey);border-bottom:1px solid var(--border)">
+<div class="gantt-label" style="font-size:10px;color:var(--muted);font-weight:500;align-items:center">Campaign Type</div>
+<div style="display:grid;grid-template-columns:repeat(13,1fr)" id="gantt-weeks-header"></div>
+</div>
+<!-- Webinars -->
+<div class="gantt-row">
+<div class="gantt-label" style="color:var(--blue)">Webinars</div>
+<div class="gantt-bars" id="gantt-webinars" style="min-height:148px"></div>
+</div>
+<!-- Events -->
+<div class="gantt-row">
+<div class="gantt-label" style="color:var(--orange)">Events</div>
+<div class="gantt-bars" id="gantt-events" style="min-height:148px"></div>
+</div>
+<!-- Marketing -->
+<div class="gantt-row">
+<div class="gantt-label" style="color:#16a34a">Marketing</div>
+<div class="gantt-bars" id="gantt-marketing" style="min-height:116px"></div>
+</div>
+<!-- SDR Monthly Focus -->
+<div class="gantt-row">
+<div class="gantt-label"><span style="color:#f59e0b">SDR/AE</span><small>Monthly Focus</small></div>
+<div class="gantt-bars" id="gantt-sdr" style="min-height:204px"></div>
+</div>
+<!-- SDR Ongoing -->
+<div class="gantt-row">
+<div class="gantt-label"><span style="color:#fbbf24">SDR/AE</span><small>Ongoing</small></div>
+<div class="gantt-bars" id="gantt-ongoing" style="min-height:148px"></div>
+</div>
+</div>
+
+<!-- AI SDR Pilot -->
+<div class="kpi-card mb-6" style="padding:16px">
+<div class="flex gap-6" style="flex-wrap:wrap">
+<div style="flex:1;min-width:280px">
+<div class="flex items-center gap-2 mb-2"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#f59e0b;background:rgba(245,158,11,0.1);padding:2px 8px;border-radius:99px">Pilot</span><strong style="font-size:13px">AI SDR Pilot Project</strong></div>
+<p style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px">Deploy <strong style="color:var(--fg)">two AI-powered SDR engines</strong> using Claude, integrated with HubSpot, Clay, and ZoomInfo &mdash; autonomously prospecting target accounts across <strong style="color:var(--fg)">two key verticals by March.</strong></p>
+</div>
+<div style="width:1px;background:var(--border);align-self:stretch"></div>
+<div style="flex:1;min-width:280px">
+<p style="font-size:11px;font-weight:700;margin-bottom:8px">Pilot Scope &mdash; 8-week pilot &middot; Equipment Manufacturing &amp; Construction</p>
+<table style="width:100%;font-size:11px;border-collapse:collapse">
+<tr style="background:rgba(0,0,0,0.02)"><td style="padding:4px 8px;font-weight:600;color:var(--blue);white-space:nowrap;width:110px">Objective</td><td style="padding:4px 8px;color:var(--muted)">Increase reply rates, target two verticals, generate quality pipeline</td></tr>
+<tr><td style="padding:4px 8px;font-weight:600;color:#d97706;white-space:nowrap">AI SDR Engines</td><td style="padding:4px 8px;color:var(--muted)">2 &mdash; Mid-Market Equipment Manufacturing (200 accounts) &amp; Mixed Construction (200 accounts)</td></tr>
+<tr style="background:rgba(0,0,0,0.02)"><td style="padding:4px 8px;font-weight:600;color:#d97706;white-space:nowrap">Total Accounts</td><td style="padding:4px 8px;color:var(--muted)">400</td></tr>
+<tr><td style="padding:4px 8px;font-weight:600;color:#15803d;white-space:nowrap">Tech Stack</td><td style="padding:4px 8px;color:var(--muted)">Claude &middot; HubSpot &middot; Clay &middot; ZoomInfo &middot; LinkedIn</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+<!-- Legend -->
+<div class="flex items-center justify-between" style="flex-wrap:wrap;gap:16px;font-size:13px">
+<div class="flex items-center gap-2"><div class="legend-swatch" style="background:var(--blue)"></div><span class="text-muted">5 Webinars</span></div>
+<div class="flex items-center gap-2"><div class="legend-swatch" style="background:var(--orange)"></div><span class="text-muted">5 Events</span></div>
+<div class="flex items-center gap-2"><div class="legend-swatch" style="background:#22c55e"></div><span class="text-muted">4 Marketing Campaigns</span></div>
+<div class="flex items-center gap-2"><div class="legend-swatch" style="background:#f59e0b"></div><span class="text-muted">12 SDR Campaigns</span></div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: BRAND REFRESH -->
+<div class="page" id="page-brand-refresh-2">
+<div style="background:#fff">
+
+<!-- Title -->
+<section class="brand-section" style="min-height:80vh;display:flex;flex-direction:column;justify-content:center;border-top:none;background:linear-gradient(135deg,#fff,var(--grey))">
+<p style="color:var(--blue);font-weight:500;letter-spacing:0.15em;font-size:13px;text-transform:uppercase;margin-bottom:24px;font-family:'Plus Jakarta Sans',sans-serif">Brand Evolution</p>
+<h1 style="font-size:3rem;font-weight:300;line-height:1.3;margin-bottom:32px">AI-powered AP automation,<span style="display:block;color:var(--orange)">tailored to perfection</span></h1>
+<p style="font-size:1.1rem;color:var(--muted);max-width:640px;line-height:1.7">A strategic update to clarify our positioning, strengthen market differentiation, and communicate our value with precision.</p>
+</section>
+
+<!-- 01 Why Change -->
+<section class="brand-section">
+<span class="brand-num">01</span>
+<h2>Why Change</h2>
+<div class="grid-2" style="gap:48px">
+<div>
+<h3 style="font-size:1.2rem;font-weight:600;margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif">The Category Reality</h3>
+<p style="color:var(--muted);line-height:1.7;margin-bottom:32px;font-size:14px">Most P2P and AP projects are sold as simple technology fixes, but become chaotic once they meet real-world complexity. Generic implementations misfit real processes and controls. Integration risk across ERP estates stalls transformation.</p>
+<h3 style="font-size:1.2rem;font-weight:600;margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif">The Opportunity</h3>
+<p style="color:var(--muted);line-height:1.7;font-size:14px">Visual parity in our category is high&mdash;most competitors rely on flat, corporate blue branding. There is room for SoftCo to stand out with a more precise, engineered visual identity that reflects our tailored approach.</p>
+</div>
+<div style="background:var(--grey);padding:40px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)">
+<h3 style="font-size:1.2rem;font-weight:600;margin-bottom:24px;font-family:'Plus Jakarta Sans',sans-serif">Our Differentiators</h3>
+<ul style="list-style:none;padding:0">
+<li style="display:flex;gap:12px;margin-bottom:12px"><span style="width:6px;height:6px;background:var(--blue);border-radius:50%;margin-top:8px;flex-shrink:0"></span><span>"Perfect fit" promise through tailored templating</span></li>
+<li style="display:flex;gap:12px;margin-bottom:12px"><span style="width:6px;height:6px;background:var(--blue);border-radius:50%;margin-top:8px;flex-shrink:0"></span><span>AI-native features with modular flexibility</span></li>
+<li style="display:flex;gap:12px;margin-bottom:12px"><span style="width:6px;height:6px;background:var(--blue);border-radius:50%;margin-top:8px;flex-shrink:0"></span><span>Integration pattern library for complex ERP estates</span></li>
+<li style="display:flex;gap:12px;margin-bottom:12px"><span style="width:6px;height:6px;background:var(--blue);border-radius:50%;margin-top:8px;flex-shrink:0"></span><span>Single-tenant security and data isolation</span></li>
+<li style="display:flex;gap:12px"><span style="width:6px;height:6px;background:var(--blue);border-radius:50%;margin-top:8px;flex-shrink:0"></span><span>100% project success rate; 98% customer retention</span></li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- 02 Why We Exist -->
+<section class="brand-section alt">
+<span class="brand-num">02</span>
+<h2>Why We Exist</h2>
+<div style="background:#fff;padding:48px;border-radius:4px;border:1px solid rgba(0,0,0,0.04);margin-bottom:48px">
+<p class="section-label" style="color:var(--blue)">Our Vision</p>
+<p style="font-size:1.5rem;font-weight:300;line-height:1.6;font-family:'Lora',serif">To give finance teams in complex, fast-growing organisations confidence that their P2P and AP automation fits, scales, and delivers measurable outcomes.</p>
+</div>
+<h3 style="font-size:1.2rem;font-weight:600;margin-bottom:24px;font-family:'Plus Jakarta Sans',sans-serif">Customer Goals We Enable</h3>
+<div class="grid-4">
+<div style="background:#fff;padding:24px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)"><p class="font-semibold">Increased efficiency</p><p class="text-muted">&amp; savings</p></div>
+<div style="background:#fff;padding:24px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)"><p class="font-semibold">Visibility, control</p><p class="text-muted">&amp; compliance</p></div>
+<div style="background:#fff;padding:24px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)"><p class="font-semibold">Improved supplier</p><p class="text-muted">relationships</p></div>
+<div style="background:#fff;padding:24px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)"><p class="font-semibold">Strategic</p><p class="text-muted">decision-making</p></div>
+</div>
+</section>
+
+<!-- 03 The New Positioning -->
+<section class="brand-section">
+<span class="brand-num">03</span>
+<h2>The New Positioning</h2>
+<div class="brand-hero"><p style="font-family:'Lora',serif">AI-powered AP automation,<span>tailored to perfection</span></p></div>
+<div class="grid-2" style="gap:48px">
+<div>
+<p class="section-label" style="color:var(--blue)">Positioning Statement</p>
+<p style="font-size:1.05rem;line-height:1.7;margin-bottom:32px">For finance teams in uniquely complex, fast-growing businesses, SoftCo is the specialist partner that guarantees successful P2P/AP automation by tailoring expert delivery and a modular, AI-native platform to the precise contours of each environment.</p>
+<p class="section-label" style="color:var(--blue)">What We Stand For</p>
+<p style="color:var(--muted);line-height:1.7;font-size:14px">Too many vendors sell an automation promise then spend months trying to make it fit your real processes. "Tailored to perfection" is our perfect-fit promise&mdash;your P2P and AP automation fits first time.</p>
+</div>
+<div>
+<p class="section-label" style="color:var(--blue)">How We Do It</p>
+<div style="margin-bottom:24px"><div class="flex gap-4"><span style="font-weight:600;font-size:1.1rem;color:var(--orange)">1.</span><div><p class="font-semibold">Tailored Delivery Process</p><p class="text-sm text-muted">Adapts to your controls, governance, tax rules, and ERP architecture</p></div></div></div>
+<div style="margin-bottom:24px"><div class="flex gap-4"><span style="font-weight:600;font-size:1.1rem;color:var(--orange)">2.</span><div><p class="font-semibold">Flexible, Modular Technology</p><p class="text-sm text-muted">AI-native platform for multi-ERP, multi-entity, multi-jurisdiction complexity</p></div></div></div>
+<div style="margin-bottom:24px"><div class="flex gap-4"><span style="font-weight:600;font-size:1.1rem;color:var(--orange)">3.</span><div><p class="font-semibold">Outcomes You Can Evidence</p><p class="text-sm text-muted">Focus on measurable results, not implementation checklists</p></div></div></div>
+<div><div class="flex gap-4"><span style="font-weight:600;font-size:1.1rem;color:var(--orange)">4.</span><div><p class="font-semibold">Partnership and Culture</p><p class="text-sm text-muted">Experienced experts on your side, engaged beyond go-live</p></div></div></div>
+</div>
+</div>
+</section>
+
+<!-- 04 Tone of Voice -->
+<section class="brand-section alt">
+<span class="brand-num">04</span>
+<h2>Tone of Voice &amp; Personality</h2>
+<div class="grid-2" style="gap:32px;margin-bottom:48px;grid-template-columns:1fr 2fr">
+<div style="background:#fff;padding:32px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)">
+<p class="section-label" style="color:var(--blue)">Brand Personality</p>
+<div style="margin-bottom:16px"><div class="flex justify-between mb-2"><span class="font-medium">The Ruler</span><span class="font-semibold text-orange">60%</span></div><p class="text-sm text-muted mb-2">Control, polish, authority</p><div style="width:100%;height:6px;background:var(--grey);border-radius:99px"><div style="height:100%;width:60%;background:var(--orange);border-radius:99px"></div></div></div>
+<div><div class="flex justify-between mb-2"><span class="font-medium">The Hero</span><span class="font-semibold text-orange">40%</span></div><p class="text-sm text-muted mb-2">Momentum, clarity, certainty</p><div style="width:100%;height:6px;background:var(--grey);border-radius:99px"><div style="height:100%;width:40%;background:var(--orange);border-radius:99px"></div></div></div>
+</div>
+<div style="background:#fff;padding:32px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)">
+<p class="section-label" style="color:var(--blue)">Voice Attributes</p>
+<div style="padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,0.06);margin-bottom:12px"><span class="font-semibold text-orange">1.</span> <strong>Insightful</strong> <span class="text-muted">&mdash; We demonstrate deep expertise through considered, evidence-backed perspectives</span></div>
+<div style="padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,0.06);margin-bottom:12px"><span class="font-semibold text-orange">2.</span> <strong>Challenging</strong> <span class="text-muted">&mdash; We question category norms and set new expectations for what's achievable</span></div>
+<div style="padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,0.06);margin-bottom:12px"><span class="font-semibold text-orange">3.</span> <strong>Bold, but controlled</strong> <span class="text-muted">&mdash; We make confident statements underpinned by proven capability</span></div>
+<div style="padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,0.06);margin-bottom:12px"><span class="font-semibold text-orange">4.</span> <strong>Intelligent wit</strong> <span class="text-muted">&mdash; We communicate with precision and occasional dry humour&mdash;never flippant</span></div>
+<div><span class="font-semibold text-orange">5.</span> <strong>Warm and professional</strong> <span class="text-muted">&mdash; We are approachable experts who listen first, configure second</span></div>
+</div>
+</div>
+<div style="background:#fff;padding:32px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)">
+<p class="section-label" style="color:var(--blue)">Example Headlines</p>
+<div class="grid-2" style="gap:24px">
+<p style="font-size:1.05rem;font-family:'Lora',serif;font-style:italic">"Your exception isn't an exception to us."</p>
+<p style="font-size:1.05rem;font-family:'Lora',serif;font-style:italic">"100% project success isn't luck. It's process."</p>
+<p style="font-size:1.05rem;font-family:'Lora',serif;font-style:italic">"If they promise 'plug-and-play,' ask who's playing."</p>
+<p style="font-size:1.05rem;font-family:'Lora',serif;font-style:italic">"Finance may be complex. Your automation shouldn't be."</p>
+</div>
+</div>
+</section>
+
+<!-- 05 Colour Palette -->
+<section class="brand-section">
+<span class="brand-num" style="color:var(--orange)">05</span>
+<h2>Colour Palette &amp; Visual Identity</h2>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:48px">
+<div class="swatch"><div class="swatch-color" style="background:#047FE5"></div><p class="font-semibold text-sm">SoftCo Blue</p><p class="text-xs text-muted" style="font-family:monospace">#047FE5</p></div>
+<div class="swatch"><div class="swatch-color" style="background:#060D2E"></div><p class="font-semibold text-sm">Dark Blue</p><p class="text-xs text-muted" style="font-family:monospace">#060D2E</p></div>
+<div class="swatch"><div class="swatch-color" style="background:#E8F2FD"></div><p class="font-semibold text-sm">Light Blue</p><p class="text-xs text-muted" style="font-family:monospace">#E8F2FD</p></div>
+<div class="swatch"><div class="swatch-color" style="background:#F2F2F2"></div><p class="font-semibold text-sm">Grey</p><p class="text-xs text-muted" style="font-family:monospace">#F2F2F2</p></div>
+<div class="swatch"><div class="swatch-color" style="background:#F7931E"></div><p class="font-semibold text-sm">Orange</p><p class="text-xs text-muted" style="font-family:monospace">#F7931E</p></div>
+</div>
+<div class="grid-2" style="gap:32px;margin-bottom:48px">
+<div style="background:var(--grey);padding:32px;border-radius:4px;border-left:4px solid var(--orange)">
+<p class="section-label" style="color:var(--orange)">Colour Hierarchy</p>
+<div class="flex justify-between mb-3"><span>SoftCo Blue</span><span class="text-muted">40-60% of visible colour</span></div>
+<div class="flex justify-between mb-3"><span>Dark Blue &amp; Neutrals</span><span class="text-muted">30-50%</span></div>
+<div class="flex justify-between items-center"><span class="flex items-center gap-2"><span style="width:12px;height:12px;background:var(--orange);border-radius:2px;display:inline-block"></span>Orange</span><span class="text-muted">0-10% &mdash; highlights only</span></div>
+</div>
+<div style="background:var(--grey);padding:32px;border-radius:4px;border-left:4px solid var(--orange)">
+<p class="section-label" style="color:var(--orange)">Visual Principles</p>
+<div style="display:flex;gap:12px;margin-bottom:8px"><span style="width:6px;height:6px;background:var(--orange);border-radius:50%;margin-top:7px;flex-shrink:0"></span><span>Blueprint-inspired linework for structure</span></div>
+<div style="display:flex;gap:12px;margin-bottom:8px"><span style="width:6px;height:6px;background:var(--orange);border-radius:50%;margin-top:7px;flex-shrink:0"></span><span>Geometric gradients in brand colours</span></div>
+<div style="display:flex;gap:12px;margin-bottom:8px"><span style="width:6px;height:6px;background:var(--orange);border-radius:50%;margin-top:7px;flex-shrink:0"></span><span>Serif headlines (authority) + sans-serif body (clarity)</span></div>
+<div style="display:flex;gap:12px"><span style="width:6px;height:6px;background:var(--orange);border-radius:50%;margin-top:7px;flex-shrink:0"></span><span>Generous whitespace and clear grid</span></div>
+</div>
+</div>
+</section>
+
+<!-- 06 Roll-Out Plan -->
+<section class="brand-section alt">
+<span class="brand-num">06</span>
+<h2>Roll-Out Plan</h2>
+<div style="margin-bottom:16px;display:flex;justify-content:space-between">
+<span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.1em">Dec 2025</span>
+<span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.1em">Jan &ndash; Feb 2026</span>
+<span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.1em">Feb &ndash; Mar 2026</span>
+<span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.1em">Mar 2026</span>
+</div>
+<div class="progress-track mb-8">
+<div class="progress-fill" style="width:37.5%"></div>
+<div class="progress-dot" style="left:37.5%"></div>
+</div>
+<div style="text-align:center;margin-top:-24px;margin-bottom:32px"><span class="text-xs text-orange font-medium" style="margin-left:calc(37.5% - 256px)">Today</span></div>
+
+<div class="grid-4" style="margin-bottom:48px">
+<!-- Phase 1 -->
+<div class="phase-card st-complete">
+<div class="flex justify-between items-center mb-3"><span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.1em">Phase 1</span><span class="pbadge complete">Complete</span></div>
+<h3 style="font-weight:600;margin-bottom:4px;font-family:'Plus Jakarta Sans',sans-serif">Internal Alignment</h3>
+<p class="text-sm text-muted mb-4">Dec 2025</p>
+<ul style="list-style:none;padding:0;font-size:13px"><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:#22c55e;border-radius:50%;margin-top:7px;flex-shrink:0"></span>Leadership alignment and sign-off</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:#22c55e;border-radius:50%;margin-top:7px;flex-shrink:0"></span>Initial Employee communications launched</li><li style="display:flex;gap:8px"><span style="width:4px;height:4px;background:#22c55e;border-radius:50%;margin-top:7px;flex-shrink:0"></span>Internal brand guidelines distributed</li></ul>
+</div>
+<!-- Phase 2 -->
+<div class="phase-card st-in-progress">
+<div class="flex justify-between items-center mb-3"><span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.1em">Phase 2</span><span class="pbadge in-progress">In Progress</span></div>
+<h3 style="font-weight:600;margin-bottom:4px;font-family:'Plus Jakarta Sans',sans-serif">Core Assets</h3>
+<p class="text-sm text-muted mb-4">Jan &ndash; Feb 2026</p>
+<ul style="list-style:none;padding:0;font-size:13px"><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Templates (ppt, pdf, social etc) delivered by agency</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0"></span>New collateral build commences</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0"></span>New look social roll out end Jan</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Website build to begin from website templates</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Sales materials and presentations updated end Feb</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Email templates and signatures updated mid Feb</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Detailed written employee communications</li><li style="display:flex;gap:8px"><span style="width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Messaging Framework &amp; playbook complete</li></ul>
+</div>
+<!-- Phase 3 -->
+<div class="phase-card">
+<div class="flex justify-between items-center mb-3"><span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.1em">Phase 3</span><span class="pbadge upcoming">Upcoming</span></div>
+<h3 style="font-weight:600;margin-bottom:4px;font-family:'Plus Jakarta Sans',sans-serif">Market Presence</h3>
+<p class="text-sm text-muted mb-4">Feb &ndash; Mar 2026</p>
+<ul style="list-style:none;padding:0;font-size:13px"><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>All Campaign creative updated</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Social media profiles refreshed</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Partner communications completed</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Partner collateral completed</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Website &amp; long-form content preparation</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>SEO &amp; clarity checks</li><li style="display:flex;gap:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Marketplace Listings, social &amp; job platform updates</li></ul>
+</div>
+<!-- Phase 4 -->
+<div class="phase-card">
+<div class="flex justify-between items-center mb-3"><span class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:0.1em">Phase 4</span><span class="pbadge upcoming">Upcoming</span></div>
+<h3 style="font-weight:600;margin-bottom:4px;font-family:'Plus Jakarta Sans',sans-serif">Full Deployment</h3>
+<p class="text-sm text-muted mb-4">Mar 2026</p>
+<ul style="list-style:none;padding:0;font-size:13px"><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Complete asset library available</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Training complete across teams face to face</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Brand audit and quality check</li><li style="display:flex;gap:8px;margin-bottom:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Website switch over end Mar</li><li style="display:flex;gap:8px"><span style="width:4px;height:4px;background:var(--muted);border-radius:50%;margin-top:7px;flex-shrink:0"></span>Amnesty communication content</li></ul>
+</div>
+</div>
+
+<!-- Risk Mitigation -->
+<div style="background:#fff;padding:32px;border-radius:4px;border:1px solid rgba(0,0,0,0.04)">
+<p class="section-label" style="color:var(--blue)">Low-Risk, Controlled Deployment</p>
+<div class="grid-3" style="gap:32px">
+<div><p class="font-semibold mb-2">Phased Approach</p><p class="text-sm text-muted">Internal alignment before external rollout. Each phase builds on the previous.</p></div>
+<div><p class="font-semibold mb-2">Quality Controls</p><p class="text-sm text-muted">Brand guidelines distributed. Training complete before full deployment.</p></div>
+<div><p class="font-semibold mb-2">Clear Ownership</p><p class="text-sm text-muted">Marketing team governs all brand execution with documented exceptions process.</p></div>
+</div>
+</div>
+</section>
+
+<!-- Closing -->
+<section class="brand-section" style="text-align:center;padding:96px 64px">
+<p style="font-size:1.5rem;font-weight:300;line-height:1.6;font-family:'Lora',serif;margin-bottom:32px">This evolution does not shout. It reassures, signals control, and reinforces trust.</p>
+<p class="text-muted" style="font-size:14px;max-width:600px;margin:0 auto">Thank you for taking the time to understand the SoftCo brand evolution. Attention to detail in how we present ourselves is part of how we build trust with our customers, partners, and colleagues.</p>
+</section>
+</div>
+</div>
+
+</div><!-- end .main -->
+</div><!-- end #app-wrapper -->
+
+<script>
+// ============================================================
+// DATA CONFIGURATION - START
+// Last updated: 2026-02-19
+// ============================================================
+
+// --- PIPELINE PAGE DATA - START ---
+var PIPELINE_DATA = {
+lastUpdated:'2026-02-19',
+totalPipeline:6610000,
+totalDeals:60,
+quarterlyPipeline:[
+{quarter:'Q1 2026',value:633000,deals:6,avgDeal:106,qualifiedDemoPct:83,quotePlusPct:50},
+{quarter:'Q2 2026',value:1901000,deals:18,avgDeal:106,qualifiedDemoPct:78,quotePlusPct:22},
+{quarter:'Q3 2026',value:2248000,deals:21,avgDeal:107,qualifiedDemoPct:85,quotePlusPct:5},
+{quarter:'Q4 2026',value:1831000,deals:15,avgDeal:122,qualifiedDemoPct:80,quotePlusPct:13}
+],
+aeColors:['#047fe5','#f7931e','#00a7b5','#1e3a5f','#6b7280','#8b5cf6'],
+aeBreakdown:[
+{name:"Paudie O'Shea",total:2515000,deals:22,avg:114,quarterly:{Q1:395000,Q2:709000,Q3:910000,Q4:502000},commentary:"Largest total value but spread across 22 deals. Strong enterprise mix. Q3/Q4 pipeline is heavily early-stage \u2014 close-date risk is real."},
+{name:"Adam McDonagh",total:2045000,deals:16,avg:128,quarterly:{Q1:112000,Q2:746000,Q3:692000,Q4:494000},commentary:"Highest avg deal size at \u20AC128K. Strong in Q2/Q3. Plexus (\u20AC260K) at Negotiation is a key Q4 commit."},
+{name:"Katy Alvord",total:1110000,deals:12,avg:93,quarterly:{Q1:57000,Q2:365000,Q3:456000,Q4:233000},commentary:"Q3/Q4 pipeline is almost entirely early-stage."},
+{name:"Killian McCarthy",total:638000,deals:7,avg:91,quarterly:{Q1:0,Q2:81000,Q3:140000,Q4:416000},commentary:"Q4-heavy with Resorts World LV (\u20AC167K) at Quotation as headline deal."},
+{name:"Jonathan Simiskey",total:256000,deals:2,avg:128,quarterly:{Q1:70000,Q2:0,Q3:0,Q4:186000},commentary:"Only 2 deals. Lippert Components (\u20AC186K) is the Q4 anchor."},
+{name:"Barry O'Brien",total:679000,deals:35,avg:19,quarterly:{Q1:36000,Q2:323000,Q3:281000,Q4:39000},commentary:"5 deals won in Q1 (\u20AC230,914 ARR). 35 open deals totalling \u20AC679K across the year \u2014 Q2 and Q3 are the primary close quarters."}
+]
+};
+// --- PIPELINE PAGE DATA - END ---
+
+// --- PIPELINE GENERATION DATA - START ---
+var PIPELINE_GEN_DATA = {
+lastUpdated:'2026-02-19',
+monthlyTargets:[1050055,1401983,1532005,2130545,1672177,2495696,1421706,1508645,2009088,2352648,2231563,1313883],
+monthlyActuals:[1200000,800000,0,0,0,0,0,0,0,0,0,0],
+currentMTDIndex:1,
+channelTargets:{marketing:35.5,sdr:28.4,partnerships:19.4,aeGenerated:16.6},
+channelActuals:{marketing:59.6,sdr:11.7,partnerships:0,aeGenerated:28.6}
+};
+// --- PIPELINE GENERATION DATA - END ---
+
+// --- JANUARY PERFORMANCE DATA - START ---
+var JANUARY_DATA = {
+lastUpdated:'2026-02-19',
+totalLeads:23,totalARR:1171000,
+leadsLabels:["1/1","2/1","3/1","4/1","5/1","6/1","7/1","8/1","9/1","10/1","11/1","12/1","13/1","14/1","15/1","16/1","17/1","18/1","19/1","20/1","21/1","22/1","23/1","24/1","25/1","26/1","27/1","28/1","29/1","30/1","31/1"],
+leadsTarget:[0.77,1.55,2.32,3.10,3.87,4.65,5.42,6.19,6.97,7.74,8.52,9.29,10.06,10.84,11.61,12.39,13.16,13.94,14.71,15.48,16.26,17.03,17.81,18.58,19.35,20.13,20.90,21.68,22.45,23.23,24],
+leadsPriorYear:[0,0,0,0,0,1,1,2,3,3,3,3,3,6,7,8,8,8,8,8,8,8,10,10,10,10,12,12,13,13,13],
+leadsActual:[0,0,0,0,0,1,3,5,6,6,6,7,8,11,11,12,12,12,14,14,14,14,20,20,20,21,22,22,23,23,23],
+leadsSplit:{marketing:65,sales:30,partnerships:5},
+leadsSplitCounts:{marketing:15,sales:7,partnerships:1},
+pipelineTarget:[33871,67742,101613,135484,169355,203226,237097,270968,304839,338710,372581,406452,440323,474194,508065,541936,575807,609678,643549,677420,711291,745162,779033,812904,846775,880646,914517,948388,982259,1016130,1050000],
+pipelinePriorYear:[null,null,null,null,null,234320,234320,234320,494720,494720,494720,494720,494720,578420,679790,772395,772395,772395,772395,772395,772395,772395,772395,772395,772395,772395,772395,772395,772395,772395,1062395],
+pipelineActual:[0,0,0,0,0,0,70572,200572,200572,200572,200572,237772,237772,237772,237772,423772,423772,423772,423772,423772,516772,705972,1042972,1042972,1042972,1089000,1089000,1089000,1089000,1170572,1170572],
+arrSplit:{salesPct:36,marketingPct:64}
+};
+// --- JANUARY PERFORMANCE DATA - END ---
+
+// --- FEBRUARY PERFORMANCE DATA - START ---
+var FEBRUARY_DATA = {
+lastUpdated:'2026-02-19',asAtDate:'19th Feb',
+totalLeads:16,totalARR:785000,
+leadsLabels:["1/2","2/2","3/2","4/2","5/2","6/2","7/2","8/2","9/2","10/2","11/2","12/2","13/2","14/2","15/2","16/2","17/2","18/2","19/2","20/2","21/2","22/2","23/2","24/2","25/2","26/2","27/2","28/2"],
+leadsTarget:[1.25,2.50,3.75,5.00,6.25,7.50,8.75,10.00,11.25,12.50,13.75,15.00,16.25,17.50,18.75,20.00,21.25,22.50,23.75,25.00,26.25,27.50,28.75,30.00,31.25,32.50,33.75,35.00],
+leadsPriorYear:[0,0,0,1,3,4,5,5,5,6,6,8,9,10,10,10,10,10,10,11,12,12,12,12,14,14,14,15],
+leadsActual:[0,1,2,3,4,4,5,5,10,12,13,13,13,13,13,14,14,16,16,null,null,null,null,null,null,null,null,null],
+leadsSplit:{marketing:62.5,sales:31.25,partnerships:6.25},
+leadsSplitCounts:{marketing:10,sales:5,partnerships:1},
+pipelineTarget:[50071,100143,150214,200286,250357,300429,350500,400571,450643,500714,550786,600857,650929,701000,751071,801143,851214,901286,951357,1001429,1051500,1101571,1151643,1201714,1251786,1301857,1351929,1402000],
+pipelinePriorYear:[0,0,0,0,174000,294873,294873,294873,294873,294873,294873,294873,294873,361613,361613,361613,361613,361613,361613,361613,361613,361613,361613,476043,476043,476043,476043,476043],
+pipelineActual:[0,0,0,0,0,0,0,0,139500,139500,139500,229500,336450,336450,336450,336450,475950,691950,784950,null,null,null,null,null,null,null,null,null],
+arrSplit:{marketingPct:52.99,salesPct:47.01}
+};
+// --- FEBRUARY PERFORMANCE DATA - END ---
+
+// ============================================================
+// DATA CONFIGURATION - END
+// ============================================================
+
+// PASSWORD GATE
+function checkPwd(){
+var p=document.getElementById('gate-pwd').value;
+if(p==='softco2026'){sessionStorage.setItem('bp_auth','1');document.getElementById('password-gate').classList.add('hidden');document.getElementById('app-wrapper').style.display='';initApp();}
+else{document.getElementById('gate-error').textContent='Incorrect password. Please try again.';}
+}
+if(sessionStorage.getItem('bp_auth')==='1'){document.getElementById('password-gate').classList.add('hidden');document.getElementById('app-wrapper').style.display='';window.addEventListener('DOMContentLoaded',initApp);}
+
+function buildPipelineHeader(){
+var el=document.getElementById('pipeline-header-badges');if(!el)return;
+el.innerHTML='<div style="background:var(--blue);color:#fff;padding:12px 24px;border-radius:12px"><p class="text-sm" style="opacity:0.8">Total Pipeline</p><p style="font-size:1.8rem;font-weight:700">\u20AC'+(PIPELINE_DATA.totalPipeline/1000000).toFixed(2)+'M</p></div>'
++'<div style="background:var(--grey);padding:12px 24px;border-radius:12px"><p class="text-sm" style="opacity:0.8">Total Deals</p><p style="font-size:1.8rem;font-weight:700">'+PIPELINE_DATA.totalDeals+'</p></div>';
+}
+
+function initApp(){
+setupRouting();
+buildCharts();
+buildGantt();
+buildPipelineHeader();
+buildPipelineCards();
+buildAECards();
+}
+
+// ROUTING
+function setupRouting(){
+var links=document.querySelectorAll('.sidebar-nav a');
+function go(){
+var hash=location.hash.replace('#','')||'cover';
+document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+var el=document.getElementById('page-'+hash);
+if(el)el.classList.add('active');
+links.forEach(function(a){a.classList.toggle('active',a.getAttribute('data-page')===hash);});
+window.scrollTo(0,0);
+// rebuild charts on navigation since hidden canvases don't render
+setTimeout(function(){buildCharts();},50);
+}
+window.addEventListener('hashchange',go);
+go();
+}
+
+// CHARTS
+var chartInstances={};
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
+
+function buildCharts(){
+buildPipelineQtrChart();
+buildAEPipelineChart();
+buildMonthlyPipelineChart();
+buildChannelContribChart();
+buildJanLeadsChart();
+buildJanLeadsPie();
+buildJanPipelineChart();
+buildJanARRPie();
+buildFebLeadsChart();
+buildFebLeadsPie();
+buildFebPipelineChart();
+buildFebARRPie();
+}
+
+function buildPipelineQtrChart(){
+var id='chartPipelineQtr';destroyChart(id);
+var ctx=document.getElementById(id);if(!ctx||!ctx.getContext)return;
+chartInstances[id]=new Chart(ctx,{type:'bar',data:{labels:PIPELINE_DATA.quarterlyPipeline.map(function(q){return q.quarter;}),datasets:[{label:'Pipeline',data:PIPELINE_DATA.quarterlyPipeline.map(function(q){return q.value;}),backgroundColor:'#047fe5',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '\u20AC'+(c.raw/1000).toFixed(0)+'K'}}}},scales:{y:{ticks:{callback:function(v){return '\u20AC'+(v/1000000).toFixed(1)+'M'}},grid:{color:'#e5e7eb'}},x:{grid:{display:false}}}}});
+}
+
+function buildAEPipelineChart(){
+var id='chartAEPipeline';destroyChart(id);
+var ctx=document.getElementById(id);if(!ctx||!ctx.getContext)return;
+var colors=PIPELINE_DATA.aeColors;
+chartInstances[id]=new Chart(ctx,{type:'bar',data:{labels:PIPELINE_DATA.aeBreakdown.map(function(ae){return ae.name;}),datasets:[{label:'Pipeline',data:PIPELINE_DATA.aeBreakdown.map(function(ae){return ae.total;}),backgroundColor:colors,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '\u20AC'+(c.raw/1000).toFixed(0)+'K'}}}},scales:{x:{ticks:{callback:function(v){return '\u20AC'+(v/1000000).toFixed(1)+'M'}},grid:{color:'#e5e7eb'}},y:{grid:{display:false}}}}});
+}
+
+function buildMonthlyPipelineChart(){
+var id='chartMonthlyPipeline';destroyChart(id);
+var ctx=document.getElementById(id);if(!ctx||!ctx.getContext)return;
+var months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+var targets=PIPELINE_GEN_DATA.monthlyTargets;
+var actuals=PIPELINE_GEN_DATA.monthlyActuals;
+var mtdIdx=PIPELINE_GEN_DATA.currentMTDIndex;
+var actualColors=actuals.map(function(v,i){return i===mtdIdx?'#f7931e':'#047fe5';});
+chartInstances[id]=new Chart(ctx,{type:'bar',data:{labels:months,datasets:[{label:'Target',data:targets,backgroundColor:'#e8f2fd',borderRadius:4},{label:'Actual',data:actuals,backgroundColor:actualColors,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': \u20AC'+(c.raw/1000).toFixed(0)+'k'}}}},scales:{y:{ticks:{callback:function(v){return '\u20AC'+(v/1000000).toFixed(1)+'M'}},grid:{color:'#e5e7eb'}},x:{grid:{display:false}}}}});
+}
+
+function buildChannelContribChart(){
+var id='chartChannelContrib';destroyChart(id);
+var ctx=document.getElementById(id);if(!ctx||!ctx.getContext)return;
+var ct=PIPELINE_GEN_DATA.channelTargets;var ca=PIPELINE_GEN_DATA.channelActuals;
+chartInstances[id]=new Chart(ctx,{type:'bar',data:{labels:['Marketing','SDR','Partnerships','AE Generated'],datasets:[{label:'Target (Full Year)',data:[ct.marketing,ct.sdr,ct.partnerships,ct.aeGenerated],backgroundColor:'#c8d6e5',borderRadius:4},{label:'Actual YTD',data:[ca.marketing,ca.sdr,ca.partnerships,ca.aeGenerated],backgroundColor:'#047fe5',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{x:{max:70,ticks:{callback:function(v){return v+'%'}},grid:{color:'#e5e7eb'}},y:{grid:{display:false}}}}});
+}
+
+function makeLineChart(id,labels,datasets,yFmt,yMax){
+destroyChart(id);
+var ctx=document.getElementById(id);if(!ctx||!ctx.getContext)return;
+chartInstances[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){if(yFmt==='euro')return c.dataset.label+': \u20AC'+(c.raw/1000).toFixed(0)+'k';return c.dataset.label+': '+Math.round(c.raw);}}}},scales:{y:{max:yMax||undefined,ticks:{callback:function(v){if(yFmt==='euro')return '\u20AC'+(v/1000).toFixed(0)+'k';return v;}},grid:{color:'#e5e7eb'}},x:{grid:{display:false},ticks:{font:{size:9},maxRotation:0,autoSkip:true,maxTicksLimit:10}}},elements:{point:{radius:2,hoverRadius:4}}}});
+}
+
+function makeDoughnut(id,labels,data,colors){
+destroyChart(id);
+var ctx=document.getElementById(id);if(!ctx||!ctx.getContext)return;
+chartInstances[id]=new Chart(ctx,{type:'doughnut',data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+c.raw+'%'}}}}}});
+}
+
+// JANUARY CHARTS
+function buildJanLeadsChart(){
+var labels=JANUARY_DATA.leadsLabels;
+var target=JANUARY_DATA.leadsTarget;
+var lastYear=JANUARY_DATA.leadsPriorYear;
+var mtd=JANUARY_DATA.leadsActual;
+makeLineChart('chartJanLeads',labels,[
+{label:'2026 Target',data:target,borderColor:'#22c55e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#22c55e',fill:false},
+{label:'2025 Actual',data:lastYear,borderColor:'#f7931e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#f7931e',fill:false},
+{label:'2026 Actual',data:mtd,borderColor:'#047fe5',borderWidth:2,pointBackgroundColor:'#047fe5',fill:false}
+],'number',30);
+}
+function buildJanLeadsPie(){makeDoughnut('chartJanLeadsPie',['Marketing','Sales','Partnerships'],[JANUARY_DATA.leadsSplit.marketing,JANUARY_DATA.leadsSplit.sales,JANUARY_DATA.leadsSplit.partnerships],['#047fe5','#f7931e','#22c55e']);}
+function buildJanPipelineChart(){
+var labels=JANUARY_DATA.leadsLabels;
+var target=JANUARY_DATA.pipelineTarget;
+var lastYear=JANUARY_DATA.pipelinePriorYear;
+var mtd=JANUARY_DATA.pipelineActual;
+makeLineChart('chartJanPipeline',labels,[
+{label:'2026 Target',data:target,borderColor:'#22c55e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#22c55e',fill:false},
+{label:'2025 Actual',data:lastYear,borderColor:'#f7931e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#f7931e',fill:false,spanGaps:false},
+{label:'2026 Actual',data:mtd,borderColor:'#047fe5',borderWidth:2,pointBackgroundColor:'#047fe5',fill:false}
+],'euro');
+}
+function buildJanARRPie(){makeDoughnut('chartJanARRPie',['Sales','Marketing'],[JANUARY_DATA.arrSplit.salesPct,JANUARY_DATA.arrSplit.marketingPct],['#047fe5','#f7931e']);}
+
+// FEBRUARY CHARTS
+function buildFebLeadsChart(){
+var labels=FEBRUARY_DATA.leadsLabels;
+var target=FEBRUARY_DATA.leadsTarget;
+var lastYear=FEBRUARY_DATA.leadsPriorYear;
+var mtd=FEBRUARY_DATA.leadsActual;
+makeLineChart('chartFebLeads',labels,[
+{label:'2026 Target',data:target,borderColor:'#22c55e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#22c55e',fill:false},
+{label:'2025 Actual',data:lastYear,borderColor:'#f7931e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#f7931e',fill:false},
+{label:'2026 MTD',data:mtd,borderColor:'#047fe5',borderWidth:2,pointBackgroundColor:'#047fe5',fill:false,spanGaps:false}
+],'number',40);
+}
+function buildFebLeadsPie(){makeDoughnut('chartFebLeadsPie',['Marketing','Sales','Partnerships'],[FEBRUARY_DATA.leadsSplit.marketing,FEBRUARY_DATA.leadsSplit.sales,FEBRUARY_DATA.leadsSplit.partnerships],['#047fe5','#f7931e','#22c55e']);}
+function buildFebPipelineChart(){
+var labels=FEBRUARY_DATA.leadsLabels;
+var target=FEBRUARY_DATA.pipelineTarget;
+var lastYear=FEBRUARY_DATA.pipelinePriorYear;
+var mtd=FEBRUARY_DATA.pipelineActual;
+makeLineChart('chartFebPipeline',labels,[
+{label:'2026 Target',data:target,borderColor:'#22c55e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#22c55e',fill:false},
+{label:'2025 Actual',data:lastYear,borderColor:'#f7931e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#f7931e',fill:false},
+{label:'2026 MTD',data:mtd,borderColor:'#047fe5',borderWidth:2,pointBackgroundColor:'#047fe5',fill:false,spanGaps:false}
+],'euro');
+}
+function buildFebARRPie(){makeDoughnut('chartFebARRPie',['Marketing','Sales'],[FEBRUARY_DATA.arrSplit.marketingPct,FEBRUARY_DATA.arrSplit.salesPct],['#047fe5','#f7931e']);}
+
+// PIPELINE QUARTER CARDS
+function buildPipelineCards(){
+var data=PIPELINE_DATA.quarterlyPipeline;
+var el=document.getElementById('pipeline-quarter-cards');if(!el)return;
+el.innerHTML=data.map(function(i){return '<div class="kpi-card"><p class="text-sm font-semibold mb-2">'+i.quarter+'</p><p style="font-size:1.5rem;font-weight:700;color:var(--blue);margin-bottom:4px">\u20AC'+(i.value/1000).toFixed(0)+'K</p><p class="text-sm text-muted mb-3">'+i.deals+' deals \u00B7 \u20AC'+i.avgDeal+'K avg</p><div style="font-size:12px"><div class="flex justify-between mb-2"><span class="text-muted">Qualified + Demo:</span><span class="font-medium">'+i.qualifiedDemoPct+'%</span></div><div class="flex justify-between"><span class="text-muted">Quote+:</span><span class="font-medium">'+i.quotePlusPct+'%</span></div></div></div>';}).join('');
+}
+
+// AE CARDS
+function buildAECards(){
+var colors=PIPELINE_DATA.aeColors;
+var data=PIPELINE_DATA.aeBreakdown;
+var el=document.getElementById('ae-cards');if(!el)return;
+el.innerHTML=data.map(function(ae,i){
+var qhtml=Object.keys(ae.quarterly).map(function(k){return '<div style="text-align:center"><p class="text-muted" style="font-size:11px">'+k+'</p><p class="font-medium" style="font-size:12px">'+(ae.quarterly[k]===0?'\u2014':'\u20AC'+(ae.quarterly[k]/1000).toFixed(0)+'k')+'</p></div>';}).join('');
+return '<div class="kpi-card"><div class="flex items-center gap-2 mb-3"><div style="width:12px;height:12px;border-radius:50%;background:'+colors[i]+'"></div><p class="font-semibold">'+ae.name+'</p></div><div class="flex gap-4 mb-3"><div><p style="font-size:11px" class="text-muted">Pipeline</p><p style="font-size:1.1rem;font-weight:700;color:var(--blue)">\u20AC'+(ae.total/1000).toFixed(0)+'K</p></div><div><p style="font-size:11px" class="text-muted">Deals</p><p style="font-size:1.1rem;font-weight:700">'+ae.deals+'</p></div><div><p style="font-size:11px" class="text-muted">Avg</p><p style="font-size:1.1rem;font-weight:700">\u20AC'+ae.avg+'K</p></div></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">'+qhtml+'</div><p class="italic text-xs text-muted" style="border-top:1px solid var(--border);padding-top:8px">'+ae.commentary+'</p></div>';
+}).join('');
+}
+
+// GANTT CHART
+function buildGantt(){
+// Week headers
+var wh=document.getElementById('gantt-weeks-header');
+if(wh){var h='';for(var i=1;i<=13;i++)h+='<div style="text-align:center;font-size:11px;color:var(--muted);padding:8px 0;border-left:1px solid rgba(0,0,0,0.05)">W'+i+'</div>';wh.innerHTML=h;}
+
+var cw=100/13;
+function addBars(containerId,items){
+var el=document.getElementById(containerId);if(!el)return;
+var html='';
+items.forEach(function(item,idx){
+var left=(item.start-1)*cw;
+var width=item.duration*cw;
+var top=item.row*28+3;
+html+='<div class="gantt-bar" style="left:'+left+'%;width:calc('+width+'% - 4px);top:'+top+'px;background:'+item.color+'" title="'+item.title+'"><span style="overflow:hidden;text-overflow:ellipsis">'+item.title+'</span></div>';
+});
+el.innerHTML=html;
+}
+
+addBars('gantt-webinars',[
+{start:3,duration:1,title:'2026 Guide to Evaluating AP Automation',color:'#047fe5',row:0},
+{start:6,duration:1,title:'AP Audit and Control Best Practices',color:'#047fe5',row:1},
+{start:8,duration:1,title:'eInvoicing - Compliance & Mandates (PwC)',color:'#047fe5',row:2},
+{start:10,duration:1,title:'Automating Complex Invoice Types',color:'#047fe5',row:3},
+{start:12,duration:1,title:'What CFOs Demand from AP in 2026',color:'#047fe5',row:4}
+]);
+addBars('gantt-events',[
+{start:5,duration:1,title:'Dublin Executive Dinner',color:'#f7931e',row:0},
+{start:9,duration:1,title:'London Executive Dinner',color:'#f7931e',row:1},
+{start:11,duration:1,title:'Lake County, IL Exec Dinner',color:'#f7931e',row:2},
+{start:12,duration:1,title:'SSoW Orlando',color:'#f7931e',row:3},
+{start:13,duration:1,title:'Lumenia Birmingham',color:'#f7931e',row:4}
+]);
+addBars('gantt-marketing',[
+{start:1,duration:8,title:'eInvoicing Content (IE/UK)',color:'#22c55e',row:0},
+{start:1,duration:13,title:'SourceForge Marketplace',color:'#16a34a',row:1},
+{start:1,duration:13,title:'Automated Nurture - subscribers / webinar registrants / MQLs',color:'#22c55e',row:2},
+{start:5,duration:8,title:'Compliance & Audit',color:'#22c55e',row:3}
+]);
+addBars('gantt-sdr',[
+{start:1,duration:4,title:'Ready for 2026?',color:'#f59e0b',row:0},
+{start:1,duration:4,title:'Oracle ERP Focus',color:'#fbbf24',row:1},
+{start:2,duration:3,title:'AP Blindspots',color:'#f59e0b',row:2},
+{start:5,duration:4,title:'AI-powered Invoicing',color:'#f59e0b',row:3},
+{start:5,duration:4,title:'eInvoicing',color:'#fbbf24',row:4},
+{start:9,duration:5,title:'Cost of Inefficiency',color:'#f59e0b',row:5},
+{start:9,duration:5,title:'Compliance & Audit',color:'#fbbf24',row:6}
+]);
+addBars('gantt-ongoing',[
+{start:1,duration:13,title:'Movers/New Roles',color:'#fcd34d',row:0},
+{start:1,duration:13,title:'DQ Leads Re-engage',color:'#fcd34d',row:1},
+{start:1,duration:13,title:'Industry Lookalikes',color:'#fcd34d',row:2},
+{start:1,duration:13,title:'Win-back Churned',color:'#fcd34d',row:3},
+{start:1,duration:13,title:'Claude queries on high quality leads in HS',color:'#fcd34d',row:4}
+]);
+}
+
+// Auto-init if already authenticated
+if(sessionStorage.getItem('bp_auth')==='1'){
+document.addEventListener('DOMContentLoaded',function(){initApp();});
+}
+</script>
+</body>
+</html>
