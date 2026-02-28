@@ -311,6 +311,21 @@ February Board Pack<br>Sales &amp; Marketing
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px" id="ae-cards">
 <!-- filled by JS -->
 </div>
+
+<div style="margin-top:48px;padding-top:32px;border-top:2px solid var(--border)">
+<div class="inline-flex gap-6 mb-6" id="acct-mgmt-header-badges">
+<!-- rendered by JS from ACCT_MGMT_DATA -->
+</div>
+<h2 style="font-size:1.25rem;font-weight:600;margin-bottom:16px">Account Management Pipeline by Quarter (Value + Stage Quality)</h2>
+<div class="kpi-card mb-8">
+<div class="chart-container"><canvas id="chartAcctMgmtQtr"></canvas></div>
+<div class="legend"><div class="legend-item"><div class="legend-swatch" style="background:var(--orange)"></div>Account Mgmt ARR</div></div>
+</div>
+
+<div class="grid-4 mb-8" id="acct-mgmt-quarter-cards">
+<!-- filled by JS -->
+</div>
+</div>
 </div>
 </div>
 
@@ -729,6 +744,20 @@ aeBreakdown:[
 };
 // --- PIPELINE PAGE DATA - END ---
 
+// --- ACCOUNT MANAGEMENT DATA - START ---
+var ACCT_MGMT_DATA = {
+lastUpdated:'2026-02-28',
+totalPipeline:868000,
+totalDeals:59,
+quarterlyPipeline:[
+{quarter:'Q1 2026',value:28000,deals:4,avgDeal:7,qualifiedDemoPct:100,quotePlusPct:100},
+{quarter:'Q2 2026',value:261000,deals:16,avgDeal:16,qualifiedDemoPct:100,quotePlusPct:19},
+{quarter:'Q3 2026',value:217000,deals:15,avgDeal:14,qualifiedDemoPct:93,quotePlusPct:20},
+{quarter:'Q4 2026',value:362000,deals:24,avgDeal:15,qualifiedDemoPct:96,quotePlusPct:13}
+]
+};
+// --- ACCOUNT MANAGEMENT DATA - END ---
+
 // --- PIPELINE GENERATION DATA - START ---
 var PIPELINE_GEN_DATA = {
 lastUpdated:'2026-02-27',
@@ -799,6 +828,8 @@ buildGantt();
 buildPipelineHeader();
 buildPipelineCards();
 buildAECards();
+buildAcctMgmtHeader();
+buildAcctMgmtCards();
 }
 
 // ROUTING
@@ -825,6 +856,7 @@ function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();de
 function buildCharts(){
 buildPipelineQtrChart();
 buildAEPipelineChart();
+buildAcctMgmtQtrChart();
 buildMonthlyPipelineChart();
 buildChannelContribChart();
 buildJanLeadsChart();
@@ -948,6 +980,26 @@ el.innerHTML=data.map(function(ae,i){
 var qhtml=Object.keys(ae.quarterly).map(function(k){return '<div style="text-align:center"><p class="text-muted" style="font-size:11px">'+k+'</p><p class="font-medium" style="font-size:12px">'+(ae.quarterly[k]===0?'\u2014':'\u20AC'+(ae.quarterly[k]/1000).toFixed(0)+'k')+'</p></div>';}).join('');
 return '<div class="kpi-card"><div class="flex items-center gap-2 mb-3"><div style="width:12px;height:12px;border-radius:50%;background:'+colors[i]+'"></div><p class="font-semibold">'+ae.name+'</p></div><div class="flex gap-4 mb-3"><div><p style="font-size:11px" class="text-muted">Pipeline</p><p style="font-size:1.1rem;font-weight:700;color:var(--blue)">\u20AC'+(ae.total/1000).toFixed(0)+'K</p></div><div><p style="font-size:11px" class="text-muted">Deals</p><p style="font-size:1.1rem;font-weight:700">'+ae.deals+'</p></div><div><p style="font-size:11px" class="text-muted">Avg</p><p style="font-size:1.1rem;font-weight:700">\u20AC'+ae.avg+'K</p></div></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">'+qhtml+'</div><p class="italic text-xs text-muted" style="border-top:1px solid var(--border);padding-top:8px">'+ae.commentary+'</p></div>';
 }).join('');
+}
+
+// ACCOUNT MANAGEMENT
+function buildAcctMgmtHeader(){
+var el=document.getElementById('acct-mgmt-header-badges');if(!el)return;
+el.innerHTML='<div style="background:var(--orange);color:#fff;padding:12px 24px;border-radius:12px"><p class="text-sm" style="opacity:0.8">Account Mgmt Pipeline</p><p style="font-size:1.8rem;font-weight:700">\u20AC'+(ACCT_MGMT_DATA.totalPipeline/1000).toFixed(0)+'K</p></div>'
++'<div style="background:var(--grey);padding:12px 24px;border-radius:12px"><p class="text-sm" style="opacity:0.8">Total Deals</p><p style="font-size:1.8rem;font-weight:700">'+ACCT_MGMT_DATA.totalDeals+'</p></div>'
++'<div style="background:var(--grey);padding:12px 24px;border-radius:12px"><p class="text-sm" style="opacity:0.8">Owner</p><p style="font-size:1.8rem;font-weight:700">Barry O\'Brien</p></div>';
+}
+
+function buildAcctMgmtQtrChart(){
+var id='chartAcctMgmtQtr';destroyChart(id);
+var ctx=document.getElementById(id);if(!ctx||!ctx.getContext)return;
+chartInstances[id]=new Chart(ctx,{type:'bar',data:{labels:ACCT_MGMT_DATA.quarterlyPipeline.map(function(q){return q.quarter;}),datasets:[{label:'Account Mgmt ARR',data:ACCT_MGMT_DATA.quarterlyPipeline.map(function(q){return q.value;}),backgroundColor:'#f7931e',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '\u20AC'+(c.raw/1000).toFixed(0)+'K'}}}},scales:{y:{ticks:{callback:function(v){return '\u20AC'+(v/1000).toFixed(0)+'K'}},grid:{color:'#e5e7eb'}},x:{grid:{display:false}}}}});
+}
+
+function buildAcctMgmtCards(){
+var data=ACCT_MGMT_DATA.quarterlyPipeline;
+var el=document.getElementById('acct-mgmt-quarter-cards');if(!el)return;
+el.innerHTML=data.map(function(i){return '<div class="kpi-card"><p class="text-sm font-semibold mb-2">'+i.quarter+'</p><p style="font-size:1.5rem;font-weight:700;color:var(--orange);margin-bottom:4px">\u20AC'+(i.value/1000).toFixed(0)+'K</p><p class="text-sm text-muted mb-3">'+i.deals+' deals \u00B7 \u20AC'+i.avgDeal+'K avg</p><div style="font-size:12px"><div class="flex justify-between mb-2"><span class="text-muted">Qualified + Demo:</span><span class="font-medium">'+i.qualifiedDemoPct+'%</span></div><div class="flex justify-between"><span class="text-muted">Quote+:</span><span class="font-medium">'+i.quotePlusPct+'%</span></div></div></div>';}).join('');
 }
 
 // GANTT CHART
