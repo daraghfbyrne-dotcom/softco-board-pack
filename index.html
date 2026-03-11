@@ -134,11 +134,12 @@ canvas{display:block}
 <a href="#pipeline-generation" data-page="pipeline-generation">Pipeline Generation</a>
 <a href="#january-performance" data-page="january-performance">January Performance (final)</a>
 <a href="#february-performance" data-page="february-performance">February Performance</a>
+<a href="#march-performance" data-page="march-performance">March Performance</a>
 <a href="#campaigns" data-page="campaigns">Q1 Campaigns</a>
 <a href="#brand-refresh-2" data-page="brand-refresh-2">Brand Refresh</a>
 </div>
 <div class="sidebar-footer">
-February Board Pack<br>Sales &amp; Marketing
+March Board Pack<br>Sales &amp; Marketing
 </div>
 </nav>
 
@@ -429,7 +430,38 @@ February Board Pack<br>Sales &amp; Marketing
 </div>
 </div>
 
-<!-- PAGE 8: Q1 CAMPAIGNS -->
+<!-- PAGE 8: MARCH PERFORMANCE -->
+<div class="page" id="page-march-performance">
+<div class="page-container">
+<h1 class="slide-header">Pipeline Generation &ndash; March</h1>
+<h2 style="font-size:1.25rem;font-weight:600;color:var(--blue);margin-bottom:16px">Performance Pipeline ARR Generated this month</h2>
+<div class="grid-2 mb-6">
+<div class="kpi-card"><p class="section-label">SALES LEADS MONTH TO DATE <span style="font-size:10px;font-weight:400">(as at 11th Mar)</span></p><div class="chart-container-sm"><canvas id="chartMarLeads"></canvas></div>
+<div class="legend"><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 5"/></svg>2026 Target</div><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#f7931e" stroke-width="2" stroke-dasharray="5 5"/></svg>2025 Actual</div><div class="legend-item"><div style="width:24px;height:2px;background:var(--blue)"></div>2026 MTD <span class="text-xs">(as at 11th Mar)</span></div></div>
+</div>
+<div class="kpi-card"><p class="section-label">SALES LEADS MTD - SPLIT <span style="font-size:10px;font-weight:400">(as at 11th Mar)</span></p><div class="chart-container-sm"><canvas id="chartMarLeadsPie"></canvas></div>
+<div class="legend" style="justify-content:center"><div class="legend-item"><div class="legend-swatch" style="background:#047fe5;border-radius:50%"></div>Marketing (6)</div><div class="legend-item"><div class="legend-swatch" style="background:#f7931e;border-radius:50%"></div>Sales (2)</div><div class="legend-item"><div class="legend-swatch" style="background:#22c55e;border-radius:50%"></div>Partnerships (1)</div><div class="legend-item">Total: <strong>10</strong></div></div>
+</div>
+</div>
+<div class="grid-2 mb-6">
+<div class="kpi-card"><p class="section-label">MARCH 2026 INCREMENTAL PIPELINE PERFORMANCE</p><div class="chart-container-sm"><canvas id="chartMarPipeline"></canvas></div>
+<div class="legend"><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 5"/></svg>2026 Target</div><div class="legend-item"><svg width="24" height="2"><line x1="0" y1="1" x2="24" y2="1" stroke="#f7931e" stroke-width="2" stroke-dasharray="5 5"/></svg>2025 Actual</div><div class="legend-item"><div style="width:24px;height:2px;background:var(--blue)"></div>2026 MTD <span class="text-xs">(as at 11th Mar)</span></div></div>
+</div>
+<div class="kpi-card"><p class="section-label">ARR PIPELINE GENERATED MTD - SPLIT <span style="font-size:10px;font-weight:400">(as at 11th Mar)</span></p><div class="chart-container-sm"><canvas id="chartMarARRPie"></canvas></div>
+<div class="legend" style="justify-content:center"><div class="legend-item"><div class="legend-swatch" style="background:#047fe5;border-radius:50%"></div>Marketing (86%)</div><div class="legend-item"><div class="legend-swatch" style="background:#22c55e;border-radius:50%"></div>Partnerships (14%)</div><div class="legend-item">Total: <strong>&euro;329k</strong></div></div>
+</div>
+</div>
+
+<!-- MARCH-COMMENTARY-START -->
+<div class="section-label">Commentary</div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">Pipeline generation is off to a solid start in March with <strong>&euro;329k</strong> generated from <strong>4 qualified opportunities</strong> in the first 11 days, tracking at <strong>21% of the monthly target</strong> (&euro;1.53M). The Beer Store (&euro;93k), Tampereen kaupunki (&euro;110k), and G&amp;W Electric (&euro;79k) are the largest new pipeline additions.</p></div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">Sales leads have reached <strong>10 MTD</strong>, tracking at <strong>27% of the monthly target</strong> (37). Lead generation accelerated in the last 3 days with 7 of the 10 leads arriving since March 9th, driven by a combination of Events, Organic Inbound, and BDR outreach.</p></div>
+<div class="bullet"><span class="bullet-dot">&bull;</span><p class="bullet-text">Marketing is driving <strong>86% of pipeline ARR</strong> (&euro;282k) and <strong>60% of sales leads</strong> (6), with Partnerships contributing the remaining <strong>14% of pipeline</strong> through Propio (&euro;46.5k). Sales-sourced leads (2) have not yet converted to qualified pipeline this month.</p></div>
+<!-- MARCH-COMMENTARY-END -->
+</div>
+</div>
+
+<!-- PAGE 9: Q1 CAMPAIGNS -->
 <div class="page" id="page-campaigns">
 <div class="page-container">
 <div class="flex justify-between items-center mb-6" style="flex-wrap:wrap;gap:16px">
@@ -801,6 +833,23 @@ arrSplit:{marketingPct:48,salesPct:52}
 };
 // --- FEBRUARY PERFORMANCE DATA - END ---
 
+// --- MARCH PERFORMANCE DATA - START ---
+var MARCH_DATA = {
+lastUpdated:'2026-03-11',asAtDate:'11th Mar',
+totalLeads:10,totalARR:328550,
+leadsLabels:["1/3","2/3","3/3","4/3","5/3","6/3","7/3","8/3","9/3","10/3","11/3","12/3","13/3","14/3","15/3","16/3","17/3","18/3","19/3","20/3","21/3","22/3","23/3","24/3","25/3","26/3","27/3","28/3","29/3","30/3","31/3"],
+leadsTarget:[1.19,2.39,3.58,4.77,5.97,7.16,8.35,9.55,10.74,11.94,13.13,14.32,15.52,16.71,17.90,19.10,20.29,21.48,22.68,23.87,25.06,26.26,27.45,28.65,29.84,31.03,32.23,33.42,34.61,35.81,37.00],
+leadsPriorYear:[0,0,0,1,2,2,2,2,2,3,4,6,6,6,7,8,10,11,11,11,11,12,13,15,16,16,17,18,25,37,40],
+leadsActual:[0,1,1,1,2,3,3,3,7,9,10,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+leadsSplit:{marketing:60,sales:20,partnerships:10},
+leadsSplitCounts:{marketing:6,sales:2,partnerships:1},
+pipelineTarget:[49420,98839,148259,197678,247098,296517,345937,395356,444776,494195,543615,593034,642454,691873,741293,790712,840132,889551,938971,988390,1037810,1087229,1136649,1186068,1235488,1284907,1334327,1383746,1433166,1482586,1532005],
+pipelinePriorYear:[0,0,0,0,0,98839,197678,197678,296517,296517,395356,395356,494195,494195,593034,593034,691873,691873,790712,790712,889551,889551,988390,988390,1087229,1087229,1186068,1186068,1284907,1383746,1482585],
+pipelineActual:[0,0,0,0,0,0,0,0,93000,328550,328550,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+arrSplit:{marketingPct:85.85,partnershipsPct:14.15}
+};
+// --- MARCH PERFORMANCE DATA - END ---
+
 // ============================================================
 // DATA CONFIGURATION - END
 // ============================================================
@@ -865,6 +914,10 @@ buildFebLeadsChart();
 buildFebLeadsPie();
 buildFebPipelineChart();
 buildFebARRPie();
+buildMarLeadsChart();
+buildMarLeadsPie();
+buildMarPipelineChart();
+buildMarARRPie();
 }
 
 function buildPipelineQtrChart(){
@@ -961,6 +1014,31 @@ makeLineChart('chartFebPipeline',labels,[
 ],'euro');
 }
 function buildFebARRPie(){makeDoughnut('chartFebARRPie',['Marketing','Sales'],[FEBRUARY_DATA.arrSplit.marketingPct,FEBRUARY_DATA.arrSplit.salesPct],['#047fe5','#f7931e']);}
+
+function buildMarLeadsChart(){
+var labels=MARCH_DATA.leadsLabels;
+var target=MARCH_DATA.leadsTarget;
+var lastYear=MARCH_DATA.leadsPriorYear;
+var mtd=MARCH_DATA.leadsActual;
+makeLineChart('chartMarLeads',labels,[
+{label:'2026 Target',data:target,borderColor:'#22c55e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#22c55e',fill:false},
+{label:'2025 Actual',data:lastYear,borderColor:'#f7931e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#f7931e',fill:false},
+{label:'2026 MTD',data:mtd,borderColor:'#047fe5',borderWidth:2,pointBackgroundColor:'#047fe5',fill:false,spanGaps:false}
+],'number',45);
+}
+function buildMarLeadsPie(){makeDoughnut('chartMarLeadsPie',['Marketing','Sales','Partnerships'],[MARCH_DATA.leadsSplit.marketing,MARCH_DATA.leadsSplit.sales,MARCH_DATA.leadsSplit.partnerships],['#047fe5','#f7931e','#22c55e']);}
+function buildMarPipelineChart(){
+var labels=MARCH_DATA.leadsLabels;
+var target=MARCH_DATA.pipelineTarget;
+var lastYear=MARCH_DATA.pipelinePriorYear;
+var mtd=MARCH_DATA.pipelineActual;
+makeLineChart('chartMarPipeline',labels,[
+{label:'2026 Target',data:target,borderColor:'#22c55e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#22c55e',fill:false},
+{label:'2025 Actual',data:lastYear,borderColor:'#f7931e',borderDash:[5,5],borderWidth:2,pointBackgroundColor:'#f7931e',fill:false},
+{label:'2026 MTD',data:mtd,borderColor:'#047fe5',borderWidth:2,pointBackgroundColor:'#047fe5',fill:false,spanGaps:false}
+],'euro',1600000);
+}
+function buildMarARRPie(){makeDoughnut('chartMarARRPie',['Marketing','Partnerships'],[MARCH_DATA.arrSplit.marketingPct,MARCH_DATA.arrSplit.partnershipsPct],['#047fe5','#22c55e']);}
 
 // PIPELINE QUARTER CARDS
 function buildPipelineCards(){
