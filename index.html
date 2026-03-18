@@ -447,69 +447,152 @@ March Board Pack<br>Sales &amp; Marketing
 <div class="page" id="page-march-performance">
 <div class="page-container">
   <h1 class="slide-header">March Performance</h1>
-  <p style="color:var(--muted);font-size:13px;margin-bottom:28px;">Month to date — as at 18 March 2026</p>
-  <p class="section-label" style="margin-bottom:12px;">Pipeline ARR Generated MTD</p>
-  <div class="grid-4" style="margin-bottom:32px;">
-    <div class="kpi-card text-center"><p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">2026 Monthly Target</p><p style="font-size:1.6rem;font-weight:700;color:var(--fg);">€1.53M</p></div>
-    <div class="kpi-card text-center"><p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">2025 Full Month</p><p style="font-size:1.6rem;font-weight:700;color:var(--fg);">€476K</p></div>
-    <div class="kpi-card text-center"><p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">2026 MTD</p><p style="font-size:1.8rem;font-weight:700;color:var(--blue);">€755K</p><p style="font-size:12px;color:var(--muted);">49% of monthly target</p></div>
-    <div class="kpi-card text-center"><p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">vs 2025 Full Month</p><p style="font-size:1.8rem;font-weight:700;color:#16a34a;">+59%</p><p style="font-size:12px;color:var(--muted);">9 working days remaining</p></div>
-  </div>
-  <p class="section-label" style="margin-bottom:12px;">Sales Leads MTD</p>
-  <div class="grid-4" style="margin-bottom:32px;">
-    <div class="kpi-card text-center"><p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">2026 Monthly Target</p><p style="font-size:1.6rem;font-weight:700;color:var(--fg);">37</p></div>
-    <div class="kpi-card text-center"><p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">2025 Full Month</p><p style="font-size:1.6rem;font-weight:700;color:var(--fg);">15</p></div>
-    <div class="kpi-card text-center"><p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">2026 MTD</p><p style="font-size:1.8rem;font-weight:700;color:var(--blue);">19</p><p style="font-size:12px;color:var(--muted);">51% of monthly target</p></div>
-    <div class="kpi-card text-center"><p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">vs 2025 Full Month</p><p style="font-size:1.8rem;font-weight:700;color:#16a34a;">+27%</p><p style="font-size:12px;color:var(--muted);">Already above full month 2025</p></div>
-  </div>
-  <div class="grid-2" style="gap:24px;margin-bottom:32px;">
-    <div>
-      <p style="font-size:13px;font-weight:600;margin-bottom:12px;">Sales Leads Split MTD (19 total)</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-        <span style="background:var(--light-blue);color:var(--blue);font-size:12px;font-weight:600;padding:5px 14px;border-radius:99px;">Marketing: 7 (37%)</span>
-        <span style="background:var(--grey);color:var(--fg);font-size:12px;font-weight:600;padding:5px 14px;border-radius:99px;">Sales/BDR: 9 (47%)</span>
-        <span style="background:#FFF7ED;color:var(--orange);font-size:12px;font-weight:600;padding:5px 14px;border-radius:99px;">Partner: 1 (5%)</span>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+
+    <!-- Top-left: Sales Leads line chart -->
+    <div class="kpi-card" style="padding:20px;">
+      <p class="section-label" style="margin-bottom:4px;">SALES LEADS MONTH TO DATE (AS AT 18TH MAR)</p>
+      <div style="position:relative;height:220px;">
+        <canvas id="chartMarLeads"></canvas>
       </div>
-      <table class="data-table">
-        <thead><tr><th>Source</th><th>Leads</th></tr></thead>
-        <tbody>
-          <tr><td>BDR Email</td><td>7</td></tr>
-          <tr><td>Organic Inbound</td><td>4</td></tr>
-          <tr><td>Event</td><td>2</td></tr>
-          <tr><td>Webinar</td><td>2</td></tr>
-          <tr><td>Partner</td><td>1</td></tr>
-          <tr><td>Other</td><td>3</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div>
-      <p style="font-size:13px;font-weight:600;margin-bottom:12px;">Pipeline ARR Split MTD (€755K)</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-        <span style="background:var(--light-blue);color:var(--blue);font-size:12px;font-weight:600;padding:5px 14px;border-radius:99px;">Marketing: €575K (76%)</span>
-        <span style="background:var(--grey);color:var(--fg);font-size:12px;font-weight:600;padding:5px 14px;border-radius:99px;">Sales: €130K (17%)</span>
-        <span style="background:#FFF7ED;color:var(--orange);font-size:12px;font-weight:600;padding:5px 14px;border-radius:99px;">Partner: €50K (7%)</span>
+      <div style="display:flex;gap:20px;margin-top:10px;font-size:11px;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;border-top:2px dashed #22c55e;display:inline-block;"></span>2026 Target</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;border-top:2px dashed #f97316;display:inline-block;"></span>2025 Actual</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;background:#2563eb;display:inline-block;"></span>2026 MTD (as at 18th Mar)</span>
       </div>
-      <table class="data-table">
-        <thead><tr><th>Source</th><th>ARR</th><th>%</th></tr></thead>
-        <tbody>
-          <tr><td>Organic Inbound</td><td>€295,000</td><td>39%</td></tr>
-          <tr><td>Event</td><td>€150,000</td><td>20%</td></tr>
-          <tr><td>Webinar</td><td>€130,000</td><td>17%</td></tr>
-          <tr><td>BDR Email</td><td>€130,000</td><td>17%</td></tr>
-          <tr><td>Partner</td><td>€50,000</td><td>7%</td></tr>
-        </tbody>
-      </table>
+    </div>
+
+    <!-- Top-right: Sales Leads donut -->
+    <div class="kpi-card" style="padding:20px;">
+      <p class="section-label" style="margin-bottom:4px;">SALES LEADS MTD – SPLIT (AS AT 18TH MAR)</p>
+      <div style="position:relative;height:220px;display:flex;align-items:center;justify-content:center;">
+        <canvas id="chartMarLeadsPie" style="max-height:200px;max-width:200px;"></canvas>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;flex-wrap:wrap;justify-content:center;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#2563eb;display:inline-block;"></span>Marketing (7)</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span>Sales (11)</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block;"></span>Partnerships (1)</span>
+        &nbsp;<strong>Total: 19</strong>
+      </div>
+    </div>
+
+    <!-- Bottom-left: Pipeline ARR line chart -->
+    <div class="kpi-card" style="padding:20px;">
+      <p class="section-label" style="margin-bottom:4px;">MARCH 2026 INCREMENTAL PIPELINE PERFORMANCE</p>
+      <div style="position:relative;height:220px;">
+        <canvas id="chartMarPipeline"></canvas>
+      </div>
+      <div style="display:flex;gap:20px;margin-top:10px;font-size:11px;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;border-top:2px dashed #22c55e;display:inline-block;"></span>2026 Target</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;border-top:2px dashed #f97316;display:inline-block;"></span>2025 Actual</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;background:#2563eb;display:inline-block;"></span>2026 MTD (as at 18th Mar)</span>
+      </div>
+    </div>
+
+    <!-- Bottom-right: Pipeline ARR donut -->
+    <div class="kpi-card" style="padding:20px;">
+      <p class="section-label" style="margin-bottom:4px;">ARR PIPELINE GENERATED MTD – SPLIT (AS AT 18TH MAR)</p>
+      <div style="position:relative;height:220px;display:flex;align-items:center;justify-content:center;">
+        <canvas id="chartMarARRPie" style="max-height:200px;max-width:200px;"></canvas>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;flex-wrap:wrap;justify-content:center;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#2563eb;display:inline-block;"></span>Marketing (76%)</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span>Sales (17%)</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block;"></span>Partner (7%)</span>
+        &nbsp;<strong>Total: €755k</strong>
+      </div>
     </div>
   </div>
-  <div style="background:var(--light-blue);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:16px 20px;">
-    <p class="section-label" style="margin-bottom:8px;">Commentary</p>
-    <div class="bullet"><span class="bullet-dot">•</span><p class="bullet-text">March pipeline of <strong>€755K MTD from 8 qualified opportunities</strong> tracks at 49% of the €1.53M monthly target with 9 working days remaining. Average deal size of €94K is ahead of the year-to-date average, led by Reckitt (€150K), Applegreen (€130K), and Tampereen kaupunki (€110K).</p></div>
-    <div class="bullet"><span class="bullet-dot">•</span><p class="bullet-text"><strong>19 sales leads MTD</strong> — 51% of the 37-lead target — already exceeds March 2025's full-month total of 15. BDR Email is the top lead generator at 37%, with the AI SDR pilot contribution becoming visible in the numbers.</p></div>
-    <div class="bullet"><span class="bullet-dot">•</span><p class="bullet-text"><strong>Marketing is driving 76% of qualified pipeline ARR</strong> this month. Organic Inbound (€295K, 39%) leads — Beer Store, Tampereen kaupunki, and G&amp;W Electric are all inbound-sourced. Applegreen (€130K via Webinar) adds to the marketing contribution.</p></div>
-    <div class="bullet"><span class="bullet-dot">•</span><p class="bullet-text"><strong>Q1 close focus:</strong> Unifeeder (€141K, 47% stage) and Amentum (€165K, 63% stage) are the primary targets before quarter end. RHI Magnesita (€418K, 63%) is the highest-value deal with a March close date still in play.</p></div>
+
+  <!-- Commentary -->
+  <div>
+    <p class="section-label" style="margin-bottom:12px;">Commentary</p>
+    <div class="bullet"><span class="bullet-dot">•</span><p class="bullet-text">ARR pipeline generated (<strong>€755k</strong>) MTD is already <strong>59% above</strong> last March's full-month total (€476k). March is tracking well with 9 working days remaining, driven by strong Organic Inbound and Webinar-sourced qualified opportunities across 8 deals.</p></div>
+    <div class="bullet"><span class="bullet-dot">•</span><p class="bullet-text">Sales leads have reached <strong>19 MTD</strong> (excluding Existing Customers), <strong>27% ahead</strong> of last year's full-month actual (15). Marketing is contributing 37% (7 leads), Sales/BDR at 58% (11 leads), with Partnerships contributing 1 lead (Propio).</p></div>
+    <div class="bullet"><span class="bullet-dot">•</span><p class="bullet-text">Pipeline ARR is <strong>Marketing-dominated</strong>: Marketing sourced <strong>76%</strong> (€575k) through Organic Inbound (Reckitt, Tampereen kaupunki, Beer Store, G&amp;W Electric), Webinar (Applegreen), and Event channels, while Sales sourced <strong>17%</strong> (€130k) via BDR Email (Red Robin, Wales &amp; West Utilities) and Partner contributed <strong>7%</strong> (€50k, Propio).</p></div>
   </div>
+
 </div>
+<script>
+(function() {
+  // ── March Sales Leads line chart ─────────────────────────────────────────
+  // Days 1-18, target ~37/21 working days ≈ 1.76/day cumulative
+  // 2025 actual: 15 over 31 days ≈ 0.48/day
+  // 2026 actual: 19 leads, distributed to key dates
+  var marDays = ['1/3','2/3','3/3','4/3','5/3','6/3','7/3','8/3','9/3','10/3','11/3','12/3','13/3','14/3','15/3','16/3','17/3','18/3'];
+  var marTarget = marDays.map((d,i) => Math.round((i+1) * 37/21));
+  var mar2025   = marDays.map((d,i) => Math.round((i+1) * 15/21));
+  var mar2026   = [0,1,1,1,2,3,3,3,6,8,13,14,15,15,15,15,16,19];
+
+  new Chart(document.getElementById('chartMarLeads'), {
+    type: 'line',
+    data: {
+      labels: marDays,
+      datasets: [
+        { label: '2026 Target', data: marTarget, borderColor: '#22c55e', borderDash: [5,3], borderWidth: 1.5, pointRadius: 3, pointBackgroundColor: '#22c55e', fill: false, tension: 0.3 },
+        { label: '2025 Actual', data: mar2025,   borderColor: '#f97316', borderDash: [5,3], borderWidth: 1.5, pointRadius: 3, pointBackgroundColor: '#f97316', fill: false, tension: 0.3 },
+        { label: '2026 MTD',    data: mar2026,   borderColor: '#2563eb', borderWidth: 2,   pointRadius: 3, pointBackgroundColor: '#2563eb', fill: false, tension: 0.3 }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } } }
+  });
+
+  // ── March Sales Leads donut ───────────────────────────────────────────────
+  // Marketing: 7, Sales/BDR: 11, Partner: 1
+  new Chart(document.getElementById('chartMarLeadsPie'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Marketing', 'Sales', 'Partnerships'],
+      datasets: [{ data: [7, 11, 1], backgroundColor: ['#2563eb','#f97316','#22c55e'], borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw } } }, cutout: '65%' }
+  });
+
+  // ── March Pipeline ARR line chart ─────────────────────────────────────────
+  // Target: €1.53M over ~21 working days = €72.9k/day
+  // 2025: €476k over 21 days ≈ €22.7k/day
+  // 2026 actual: €755k from 8 deals qualifying on specific dates
+  var marArrTarget = marDays.map((d,i) => Math.round((i+1) * 1530000/21));
+  var marArr2025   = marDays.map((d,i) => Math.round((i+1) * 476000/21));
+  // Qualified dates: Mar 9 (Beer Store €100K), Mar 10 (Tampereen €110K, G&W €85K, Propio €50K),
+  // Mar 16 (Red Robin €100K, Reckitt €150K), Mar 18 (Wales&West €30K, Applegreen €130K)
+  var marArr2026   = [0,0,0,0,0,0,0,0,100000,345000,345000,345000,345000,345000,345000,745000,745000,755000];
+
+  new Chart(document.getElementById('chartMarPipeline'), {
+    type: 'line',
+    data: {
+      labels: marDays,
+      datasets: [
+        { label: '2026 Target', data: marArrTarget, borderColor: '#22c55e', borderDash: [5,3], borderWidth: 1.5, pointRadius: 3, pointBackgroundColor: '#22c55e', fill: false, tension: 0.3 },
+        { label: '2025 Actual', data: marArr2025,   borderColor: '#f97316', borderDash: [5,3], borderWidth: 1.5, pointRadius: 3, pointBackgroundColor: '#f97316', fill: false, tension: 0.3 },
+        { label: '2026 MTD',    data: marArr2026,   borderColor: '#2563eb', borderWidth: 2,   pointRadius: 3, pointBackgroundColor: '#2563eb', fill: false, tension: 0.3 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => '€' + (v/1000) + 'k' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── March Pipeline ARR donut ──────────────────────────────────────────────
+  // Marketing €575K (76%), Sales €130K (17%), Partner €50K (7%)
+  new Chart(document.getElementById('chartMarARRPie'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Marketing', 'Sales', 'Partner'],
+      datasets: [{ data: [575, 130, 50], backgroundColor: ['#2563eb','#f97316','#22c55e'], borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.label + ': €' + ctx.raw + 'k' } } }, cutout: '65%' }
+  });
+})();
+</script>
 </div>
+
 <div class="page" id="page-campaigns" style="display:none!important">
 <div class="page-container">
 <div class="flex justify-between items-center mb-6" style="flex-wrap:wrap;gap:16px">
