@@ -241,7 +241,7 @@ March Board Pack<br>Sales &amp; Marketing
 
   <p style="font-size:14px;font-weight:600;margin-bottom:12px;">Pipeline by Quarter (Value + Stage Quality)</p>
   <div class="kpi-card" style="padding:20px;margin-bottom:24px;">
-    <div style="position:relative;height:220px;"><canvas id="chartPipelineByQtr"></canvas></div>
+    <div style="position:relative;height:220px;"><canvas id="chartPipelineQtr"></canvas></div>
     <div style="display:flex;gap:20px;justify-content:center;margin-top:12px;font-size:12px;flex-wrap:wrap;">
       <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:var(--blue);display:inline-block;"></span>Open Pipeline ARR</span>
       <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#22c55e;display:inline-block;"></span>Closed/Won</span>
@@ -276,20 +276,7 @@ March Board Pack<br>Sales &amp; Marketing
   </div>
   <div class="kpi-card" style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px;"><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--blue);display:inline-block;"></span><strong>Barry O'Brien</strong></div><p style="font-size:11px;color:var(--muted);">68 deals &middot; All Account Management</p></div><div style="display:flex;gap:32px;flex-wrap:wrap;"><div><p style="font-size:11px;color:var(--muted);">Won (7 deals)</p><p style="font-weight:700;color:#16a34a;">&euro;266.4K</p></div><div><p style="font-size:11px;color:var(--muted);">Open (61 deals)</p><p style="font-weight:700;">&euro;875.3K</p></div><div><p style="font-size:11px;color:var(--muted);">Negotiation</p><p style="font-weight:700;">7 deals</p></div><div><p style="font-size:11px;color:var(--muted);">Quotation</p><p style="font-weight:700;">6 deals</p></div></div></div><p style="font-size:11px;color:var(--muted);line-height:1.6;">Pipeline predominantly Demo-stage (4-Demo) across upsell, cross-sell, and SaaS upgrades. Key won deals include Analog Devices volume increase (&euro;183K) and Snap-On SaaS upgrade (&euro;23K). Grafton VM (&euro;34K) and Bridgepoint SaaS (&euro;25K) at Negotiation. Toolstation Capture+ (&euro;46K) and Dole Capture+ (&euro;40K) are largest open opportunities.</p></div>
 
-<script>
-(function() {
-  new Chart(document.getElementById('chartPipelineByQtr'), {
-    type: 'bar',
-    data: { labels: ['Q1 2026','Q2 2026','Q3 2026','Q4 2026'], datasets: [{ label: 'Open Pipeline ARR', data: [261,1869,3049,3271], backgroundColor: '#2563eb', borderRadius: 4 },{ label: 'Closed/Won', data: [447,0,0,0], backgroundColor: '#22c55e', borderRadius: 4 }] },
-    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ x:{grid:{display:false}}, y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{callback:v=>'\u20ac'+v+'k'}} } }
-  });
-  new Chart(document.getElementById('chartAEPipeline'), {
-    type: 'bar',
-    data: { labels: ["Paudie O'Shea","Adam McDonagh","Katy Alvord","Killian McCarthy","Jonathan Simiskey"], datasets: [{ data: [3239,2165,1378,1148,335], backgroundColor: ['#2563eb','#f7931e','#20c4c4','#1e3a5f','#9ca3af'], borderRadius:4 }] },
-    options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ x:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{callback:v=>'\u20ac'+(v/1000).toFixed(1)+'M'}}, y:{grid:{display:false}} } }
-  });
-})();
-</script>
+
 
 </div>
 </div>
